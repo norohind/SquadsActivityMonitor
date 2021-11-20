@@ -14,7 +14,7 @@ db.row_factory = lambda c, r: dict(zip([col[0] for col in c.description], r))
 
 
 def get_activity_changes(platform: str, leaderboard_type: str, limit: int, low_timestamp, high_timestamp) -> list:
-    sql_req: sqlite3.Cursor = db.execute(sql_requests.select_activity, {
+    sql_req: sqlite3.Cursor = db.execute(sql_requests.select_activity_pretty_names, {
         'LB_type': utils.LeaderboardTypes(leaderboard_type.lower()).value,
         'platform': utils.Platform(platform.upper()).value,
         'limit': limit,

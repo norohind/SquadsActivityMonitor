@@ -56,3 +56,25 @@ from (
 group by sum_score 
 order by timestamp desc 
 limit :limit);"""
+
+select_activity_pretty_names = """select 
+sum_score as TotalExperience, 
+timestamp as Timestamp, 
+action_id as ActionId, 
+sum_score_old as TotalExperienceOld, 
+sum_score - sum_score_old as Diff 
+from 
+(select sum_score, min(timestamp) as timestamp, action_id, lag (sum_score, 1, 0) over (order by sum_score) sum_score_old 
+from (
+    select sum(score) as sum_score, timestamp, action_id 
+    from squads_stats_states 
+    where 
+        leaderboard_type = :LB_type and 
+        platform = :platform and
+        :high_timestamp >=  timestamp and 
+        timestamp >= :low_timestamp 
+    group by action_id
+    ) 
+group by sum_score 
+order by timestamp desc 
+limit :limit);"""
