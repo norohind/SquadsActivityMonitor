@@ -2,7 +2,6 @@ import json
 import os
 import time
 import enum
-import typing
 
 import requests
 

@@ -19,12 +19,10 @@ tag string - (AP)
 timestamp - inserts by DB, default TIMESTAMP
 
 """
-import typing
 
 import requests
 import sqlite3
 import model
-import sql_requests
 # from EDMCLogging import get_main_logger
 import utils
 
@@ -96,7 +94,7 @@ def main():
             # main.py update all
             for platform_enum in utils.Platform:
                 for LB_type_enum in utils.LeaderboardTypes:
-                    get_and_save_leaderboard(platform_enum, LB_type_enum, db)
+                    get_and_save_leaderboard(platform_enum, LB_type_enum)
 
             exit(0)
 
@@ -107,7 +105,7 @@ def main():
                 leaderboard_enum: utils.LeaderboardTypes = utils.LeaderboardTypes(leaderboard)
 
                 for platform_enum in utils.Platform:
-                    get_and_save_leaderboard(platform_enum, leaderboard_enum, db)
+                    get_and_save_leaderboard(platform_enum, leaderboard_enum)
 
                 exit(0)
 
@@ -128,7 +126,7 @@ def main():
                 leaderboard_enum: utils.LeaderboardTypes = utils.LeaderboardTypes(leaderboard)
                 platform_enum: utils.Platform = utils.Platform(platform)
 
-                get_and_save_leaderboard(platform_enum, leaderboard_enum, db)
+                get_and_save_leaderboard(platform_enum, leaderboard_enum)
                 exit(0)
 
             except ValueError:
