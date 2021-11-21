@@ -200,25 +200,27 @@ activity_table_html_template = """
                 document.body.appendChild(buildHtmlTable(JSON.parse({items})));
             }
         </script>
+        <link type="text/css" rel="stylesheet" href="/js/table_styles.css">
     </head>
     <body>
     </body>
 </html>"""
 
 activity_table_html_styles = """
-.table {
-    width: 100%;
+table {
     margin-bottom: 20px;
     border: 1px solid #dddddd;
     border-collapse: collapse; 
 }
-.table th {
+table th {
     font-weight: bold;
     padding: 5px;
     background: #efefef;
     border: 1px solid #dddddd;
 }
-.table td {
+table td {
     border: 1px solid #dddddd;
     padding: 5px;
-}"""  # TODO: fix css for table
+    text-align:center;
+}
+"""
