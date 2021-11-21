@@ -94,5 +94,7 @@ app.add_route('/js/{file}', JS())
 
 app.add_route('/{var}', MainPage())
 
+application = app  # for uwsgi
+
 if __name__ == '__main__':
     waitress.serve(app, host='127.0.0.1', port=9485)
