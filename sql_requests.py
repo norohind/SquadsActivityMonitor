@@ -108,4 +108,5 @@ inner join
                             order by squads_stats_states.action_id desc 
                             limit 1)) old_stats 
 on new_stats.squadron_id = old_stats.squadron_id 
-where TotalExperienceDiff > 0;"""
+where TotalExperienceDiff > 0
+order by TotalExperienceDiff desc;"""
