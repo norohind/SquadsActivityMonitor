@@ -82,7 +82,7 @@ app = falcon.App()
 app.add_route('/api/activity/{leaderboard}', Activity())
 app.add_route('/api/diff/{action_id}', ActivityDiff())
 
-app.add_route('/{leaderboard}', ActivityHtml())
+app.add_route('/leaderboard/{leaderboard}', ActivityHtml())
 app.add_route('/diff/{action_id}', ActivityDiffHtml())
 
 app.add_route('/js/{file}', JS())
