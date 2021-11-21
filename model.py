@@ -56,3 +56,16 @@ def insert_leaderboard_db(leaderboard_list: dict) -> None:
         db.executemany(
             sql_requests.insert_leader_board,
             leaderboard)
+
+
+def get_diff_action_id(action_id: int) -> list:
+    """
+    Takes action_id and returns which squadrons has been changed in leaderboard as in action_id and
+    experience they got in compassion to action_id - 1 for the same leaderboard and platform
+
+    :param action_id:
+    :return:
+    """
+
+    sql_req: sqlite3.Cursor = db.execute(sql_requests.select_diff_by_action_id, {'action_id': action_id})
+    return sql_req.fetchall()

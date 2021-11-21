@@ -40,6 +40,21 @@ class ActivityHtml:
         # what? f-strings? .format? never heard about them
 
 
+class ActivityDiff:
+    def on_get(self, req: falcon.request.Request, resp: falcon.response.Response, action_id: int) -> None:
+        """
+        Give squads tags and diff in their experience for specified action_id - 1 (smart -1)
+
+        :param action_id:
+        :param req:
+        :param resp:
+        :return:
+        """
+
+        resp.content_type = falcon.MEDIA_JSON
+        resp.text = json.dumps(model.get_diff_action_id(action_id))
+
+
 class JS:
     def on_get(self, req: falcon.request.Request, resp: falcon.response.Response, file: str) -> None:
         resp.content_type = falcon.MEDIA_JS
@@ -57,6 +72,7 @@ app = falcon.App()
 app.add_route('/activity/{leaderboard}', Activity())
 app.add_route('/js/{file}', JS())
 app.add_route('/{leaderboard}', ActivityHtml())
+app.add_route('/diff/{action_id}', ActivityDiff())
 
 if __name__ == '__main__':
     waitress.serve(app, host='127.0.0.1', port=9485)

@@ -78,3 +78,33 @@ from (
 group by sum_score 
 order by timestamp desc 
 limit :limit);"""
+
+select_diff_by_action_id = """select 
+    new_stats.tag, 
+    new_stats.score as TotalExperience, 
+    old_stats.score as TotalExperienceOld, 
+    new_stats.score - old_stats.score as TotalExperienceDiff, 
+    new_stats.leaderboard_type as LeaderBoardType, 
+    new_stats.platform as Platform
+from (
+    select * 
+    from squads_stats_states 
+    where action_id = :action_id) new_stats 
+inner join 
+    (
+        select * 
+        from squads_stats_states 
+        where action_id in (
+                            select distinct squads_stats_states.action_id 
+                            from squads_stats_states, (
+                                                        select timestamp, platform, leaderboard_type, action_id 
+                                                        from squads_stats_states 
+                                                        where action_id = :action_id limit 1) sub1 
+                            where 
+                                squads_stats_states.platform = sub1.platform and 
+                                squads_stats_states.leaderboard_type = sub1.leaderboard_type and 
+                                squads_stats_states.action_id < sub1.action_id 
+                            order by squads_stats_states.action_id desc 
+                            limit 1)) old_stats 
+on new_stats.squadron_id = old_stats.squadron_id 
+where TotalExperienceDiff > 0;"""
