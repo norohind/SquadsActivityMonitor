@@ -80,6 +80,7 @@ order by timestamp desc
 limit :limit);"""
 
 select_diff_by_action_id = """select 
+    new_stats.name as SquadronName,
     new_stats.tag, 
     new_stats.score as TotalExperience, 
     old_stats.score as TotalExperienceOld, 
