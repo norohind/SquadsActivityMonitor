@@ -78,6 +78,11 @@ class JS:
             raise falcon.HTTPNotFound
 
 
+class MainPage:
+    def on_get(self, req: falcon.request.Request, resp: falcon.response.Response, var: str) -> None:
+        raise falcon.HTTPFound(f'/leaderboard/{var}')
+
+
 app = falcon.App()
 app.add_route('/api/activity/{leaderboard}', Activity())
 app.add_route('/api/diff/{action_id}', ActivityDiff())
@@ -86,6 +91,8 @@ app.add_route('/leaderboard/{leaderboard}', ActivityHtml())
 app.add_route('/diff/{action_id}', ActivityDiffHtml())
 
 app.add_route('/js/{file}', JS())
+
+app.add_route('/{var}', MainPage())
 
 if __name__ == '__main__':
     waitress.serve(app, host='127.0.0.1', port=9485)
