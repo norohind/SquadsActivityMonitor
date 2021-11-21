@@ -55,6 +55,15 @@ class ActivityDiff:
         resp.text = json.dumps(model.get_diff_action_id(action_id))
 
 
+class ActivityDiffHtml:
+    def on_get(self, req: falcon.request.Request, resp: falcon.response.Response, action_id: int) -> None:
+        resp.content_type = falcon.MEDIA_HTML
+        # table: str = json.dumps(model.get_diff_action_id(action_id))
+        resp.text = utils.activity_table_html_template.replace(
+            '{items}', json.dumps(json.dumps(model.get_diff_action_id(action_id)))
+        )
+
+
 class JS:
     def on_get(self, req: falcon.request.Request, resp: falcon.response.Response, file: str) -> None:
         resp.content_type = falcon.MEDIA_JS
@@ -69,10 +78,13 @@ class JS:
 
 
 app = falcon.App()
-app.add_route('/activity/{leaderboard}', Activity())
-app.add_route('/js/{file}', JS())
+app.add_route('/api/activity/{leaderboard}', Activity())
+app.add_route('/api/diff/{action_id}', ActivityDiff())
+
 app.add_route('/{leaderboard}', ActivityHtml())
-app.add_route('/diff/{action_id}', ActivityDiff())
+app.add_route('/diff/{action_id}', ActivityDiffHtml())
+
+app.add_route('/js/{file}', JS())
 
 if __name__ == '__main__':
     waitress.serve(app, host='127.0.0.1', port=9485)
