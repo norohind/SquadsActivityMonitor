@@ -7,6 +7,7 @@ import utils
 from EDMCLogging import get_main_logger
 
 logger = get_main_logger()
+logger.propagate = False
 
 db: sqlite3.Connection = sqlite3.connect('squads_stat.sqlite3', check_same_thread=False)
 
