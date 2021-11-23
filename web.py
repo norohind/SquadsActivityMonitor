@@ -83,6 +83,16 @@ class MainPage:
         raise falcon.HTTPFound(f'/leaderboard/{var}')
 
 
+class Cache:
+    def on_post(self, req: falcon.request.Request, resp: falcon.response.Response, action: str) -> None:
+        if action.lower() == 'drop':
+            model.cache.delete_all()
+            resp.status = falcon.HTTP_204
+            return
+
+        raise falcon.HTTPNotFound
+
+
 app = falcon.App()
 app.add_route('/api/activity/{leaderboard}', Activity())
 app.add_route('/api/diff/{action_id}', ActivityDiff())
@@ -93,6 +103,8 @@ app.add_route('/diff/{action_id}', ActivityDiffHtml())
 app.add_route('/js/{file}', JS())
 
 app.add_route('/{var}', MainPage())
+
+app.add_route('/api/cache/{action}', Cache())
 
 application = app  # for uwsgi
 
