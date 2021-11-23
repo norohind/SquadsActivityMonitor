@@ -9,10 +9,6 @@ from EDMCLogging import get_main_logger
 
 logger = get_main_logger()
 
-BASE_URL = 'https://api.orerve.net/2.0/website/squadron/'
-INFO_ENDPOINT = 'info'
-NEWS_ENDPOINT = 'news/list'
-
 TIME_BETWEEN_REQUESTS: float = 3.0
 if os.getenv("JUBILANT_TIME_BETWEEN_REQUESTS") is not None:
     try:
