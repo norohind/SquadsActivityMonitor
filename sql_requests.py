@@ -59,7 +59,7 @@ limit :limit);"""
 
 select_activity_pretty_names = """select 
 sum_score as TotalExperience, 
-timestamp as Timestamp, 
+timestamp as 'Timestamp UTC',
 action_id as ActionId, 
 sum_score_old as TotalExperienceOld, 
 sum_score - sum_score_old as Diff 
