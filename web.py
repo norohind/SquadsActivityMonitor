@@ -66,8 +66,8 @@ class ActivityDiffHtml:
 
 
 class MainPage:
-    def on_get(self, req: falcon.request.Request, resp: falcon.response.Response, var: str) -> None:
-        raise falcon.HTTPFound(f'/leaderboard/{var}')
+    def on_get(self, req: falcon.request.Request, resp: falcon.response.Response) -> None:
+        raise falcon.HTTPMovedPermanently('/index.html')
 
 
 class Cache:
@@ -88,6 +88,8 @@ app.add_route('/leaderboard/{leaderboard}/platform/{platform}', ActivityHtml())
 app.add_route('/diff/{action_id}', ActivityDiffHtml())
 
 app.add_route('/api/cache/{action}', Cache())
+
+app.add_route('/', MainPage())
 
 application = app  # for uwsgi
 
