@@ -64,20 +64,6 @@ class ActivityDiffHtml:
         )
 
 
-class JS:
-    def on_get(self, req: falcon.request.Request, resp: falcon.response.Response, file: str) -> None:
-        if file == 'json2htmltable.js':
-            resp.content_type = falcon.MEDIA_JS
-            resp.text = utils.html_table_generator
-
-        elif file == 'table_styles.css':
-            resp.content_type = 'text/css'
-            resp.text = utils.activity_table_html_styles
-
-        else:
-            raise falcon.HTTPNotFound
-
-
 class MainPage:
     def on_get(self, req: falcon.request.Request, resp: falcon.response.Response, var: str) -> None:
         raise falcon.HTTPFound(f'/leaderboard/{var}')
