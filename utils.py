@@ -3,6 +3,7 @@ import os
 import time
 import enum
 
+import falcon
 import requests
 
 from EDMCLogging import get_main_logger
@@ -140,50 +141,14 @@ def _get_bearer() -> str:
     return bearer
 
 
-html_table_generator = """
-// Thanks to https://stackoverflow.com/a/21065846
-var _table_ = document.createElement('table'),
-  _tr_ = document.createElement('tr'),
-  _th_ = document.createElement('th'),
-  _td_ = document.createElement('td');
+def build_index_page(app: falcon.App, index_path: str) -> None:
+    with open(index_path, 'w', encoding='utf-8') as index_file:  # kinda documentation on main page
+        from falcon import inspect
+        app_info = inspect.inspect_app(app)
+        app_info_str = app_info.__str__().replace('\n', '<br>')
 
-// Builds the HTML Table out of myList json data from Ivy restful service.
-function buildHtmlTable(arr) {
-  var table = _table_.cloneNode(false),
-    columns = addAllColumnHeaders(arr, table);
-  for (var i = 0, maxi = arr.length; i < maxi; ++i) {
-    var tr = _tr_.cloneNode(false);
-    for (var j = 0, maxj = columns.length; j < maxj; ++j) {
-      var td = _td_.cloneNode(false);
-      cellValue = arr[i][columns[j]];
-      td.appendChild(document.createTextNode(arr[i][columns[j]] || ''));
-      tr.appendChild(td);
-    }
-    table.appendChild(tr);
-  }
-  return table;
-}
+        index_file.write(index_template.format(body=app_info_str))
 
-// Adds a header row to the table and returns the set of columns.
-// Need to do union of keys from all records as some records may not contain
-// all records
-function addAllColumnHeaders(arr, table) {
-  var columnSet = [],
-    tr = _tr_.cloneNode(false);
-  for (var i = 0, l = arr.length; i < l; i++) {
-    for (var key in arr[i]) {
-      if (arr[i].hasOwnProperty(key) && columnSet.indexOf(key) === -1) {
-        columnSet.push(key);
-        var th = _th_.cloneNode(false);
-        th.appendChild(document.createTextNode(key));
-        tr.appendChild(th);
-      }
-    }
-  }
-  table.appendChild(tr);
-  return columnSet;
-}
-"""
 
 activity_table_html_template = """ 
     <!DOCTYPE HTML>
@@ -220,21 +185,13 @@ activity_table_html_template = """
     </body>
 </html>"""
 
-activity_table_html_styles = """
-table {
-    margin-bottom: 20px;
-    border: 1px solid #dddddd;
-    border-collapse: collapse; 
-}
-table th {
-    font-weight: bold;
-    padding: 5px;
-    background: #efefef;
-    border: 1px solid #dddddd;
-}
-table td {
-    border: 1px solid #dddddd;
-    padding: 5px;
-    text-align:center;
-}
-"""
+index_template = """
+<!DOCTYPE html>
+<html>
+ <head>
+  <meta charset="utf-8">
+ </head>
+<body>
+    <p>{body}</p>
+</body>
+</html>"""[1:]

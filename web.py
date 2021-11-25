@@ -1,6 +1,7 @@
 import model
 import json
 import falcon
+import os
 
 import utils
 
@@ -86,14 +87,17 @@ app.add_route('/api/diff/{action_id}', ActivityDiff())
 app.add_route('/leaderboard/{leaderboard}/platform/{platform}', ActivityHtml())
 app.add_route('/diff/{action_id}', ActivityDiffHtml())
 
-app.add_route('/{var}', MainPage())
-
 app.add_route('/api/cache/{action}', Cache())
 
 application = app  # for uwsgi
 
+index_file = os.path.join(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static'), 'index.html')
+
+utils.build_index_page(app, index_file)
+
 if __name__ == '__main__':
     import waitress
-    import os
-    app.add_static_route('/js', os.path.join(os.path.dirname(os.path.abspath(__file__)), 'js'))
+
+    app.add_static_route('/js', os.path.join(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static'), 'js'))
+    app.add_static_route('/', os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static'))
     waitress.serve(app, host='127.0.0.1', port=9485)
