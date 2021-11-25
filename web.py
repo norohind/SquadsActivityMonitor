@@ -1,5 +1,3 @@
-import waitress
-
 import model
 import json
 import falcon
@@ -102,8 +100,6 @@ app.add_route('/api/diff/{action_id}', ActivityDiff())
 app.add_route('/leaderboard/{leaderboard}/platform/{platform}', ActivityHtml())
 app.add_route('/diff/{action_id}', ActivityDiffHtml())
 
-app.add_route('/js/{file}', JS())
-
 app.add_route('/{var}', MainPage())
 
 app.add_route('/api/cache/{action}', Cache())
@@ -111,4 +107,7 @@ app.add_route('/api/cache/{action}', Cache())
 application = app  # for uwsgi
 
 if __name__ == '__main__':
+    import waitress
+    import os
+    app.add_static_route('/js', os.path.join(os.path.dirname(os.path.abspath(__file__)), 'js'))
     waitress.serve(app, host='127.0.0.1', port=9485)
