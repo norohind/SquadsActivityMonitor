@@ -13,11 +13,12 @@ Request /activity/cqc?platform=pc[&limit=50&after=&before]
 
 
 class Activity:
-    def on_get(self, req: falcon.request.Request, resp: falcon.response.Response, leaderboard: str) -> None:
+    def on_get(self, req: falcon.request.Request, resp: falcon.response.Response, leaderboard: str, platform: str)\
+            -> None:
         resp.content_type = falcon.MEDIA_JSON
 
         args_activity_changes = {
-            'platform': req.params.get('platform', 'pc'),
+            'platform': platform,
             'leaderboard_type': leaderboard,
             'limit': req.params.get('limit', 10),
             'high_timestamp': req.params.get('before', 'a'),
@@ -32,8 +33,9 @@ class Activity:
 
 
 class ActivityHtml:
-    def on_get(self, req: falcon.request.Request, resp: falcon.response.Response, leaderboard: str) -> None:
-        Activity().on_get(req, resp, leaderboard)
+    def on_get(self, req: falcon.request.Request, resp: falcon.response.Response, leaderboard: str, platform: str)\
+            -> None:
+        Activity().on_get(req, resp, leaderboard, platform)
         table_in_json: str = resp.text
         resp.content_type = falcon.MEDIA_HTML
         resp.text = utils.activity_table_html_template.replace('{items}', json.dumps(table_in_json))
@@ -94,10 +96,10 @@ class Cache:
 
 
 app = falcon.App()
-app.add_route('/api/activity/{leaderboard}', Activity())
+app.add_route('/api/leaderboard/{leaderboard}/{platform}', Activity())
 app.add_route('/api/diff/{action_id}', ActivityDiff())
 
-app.add_route('/leaderboard/{leaderboard}', ActivityHtml())
+app.add_route('/leaderboard/{leaderboard}/{platform}', ActivityHtml())
 app.add_route('/diff/{action_id}', ActivityDiffHtml())
 
 app.add_route('/js/{file}', JS())
