@@ -96,10 +96,10 @@ class Cache:
 
 
 app = falcon.App()
-app.add_route('/api/leaderboard/{leaderboard}/{platform}', Activity())
+app.add_route('/api/leaderboard/{leaderboard}/platform/{platform}', Activity())
 app.add_route('/api/diff/{action_id}', ActivityDiff())
 
-app.add_route('/leaderboard/{leaderboard}/{platform}', ActivityHtml())
+app.add_route('/leaderboard/{leaderboard}/platform/{platform}', ActivityHtml())
 app.add_route('/diff/{action_id}', ActivityDiffHtml())
 
 app.add_route('/js/{file}', JS())
