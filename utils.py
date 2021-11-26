@@ -150,6 +150,29 @@ def build_index_page(app: falcon.App, index_path: str) -> None:
         index_file.write(index_template.format(body=app_info_str))
 
 
+def measure(function: callable):
+    """
+    Decorator to measure function (method) execution time
+    Use as easy as
+
+    @utils.measure
+    def im_function_to_measure():
+        ....
+
+    :param function:
+    :return:
+    """
+
+    def decorated(*args, **kwargs):
+        start = time.time()
+        result = function(*args, **kwargs)
+        end = time.time()
+        print(f'{function.__name__}: {(end - start) * 100} ms')
+        return result
+
+    return decorated
+
+
 activity_table_html_template = """ 
     <!DOCTYPE HTML>
 <html lang="en-US">
