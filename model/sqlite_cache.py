@@ -1,6 +1,8 @@
 import sqlite3
 from EDMCLogging import get_main_logger
 
+from typing import Union
+
 logger = get_main_logger()
 
 
@@ -39,7 +41,7 @@ class Cache:
                 # key doesn't exists, need to insert new row
                 self.db.execute('insert into cache (key, value) values (?, ?);', [key, value])
 
-    def get(self, key, default=None):
+    def get(self, key, default=None) -> Union[str, None]:
         if self.disabled:
             return
 
@@ -49,10 +51,16 @@ class Cache:
 
         return res['value']
 
-    def delete(self, key):
+    def delete(self, key) -> None:
+        if self.disabled:
+            return
+
         self.db.execute('delete from cache where key = ?;', [key])
 
-    def delete_all(self):
+    def delete_all(self) -> None:
+        if self.disabled:
+            return
+
         logger.debug('Dropping cache')
         with self.db:
             self.db.execute('delete from cache;')
