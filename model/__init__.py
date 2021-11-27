@@ -7,8 +7,6 @@ logger = get_main_logger()
 
 env_choose = os.getenv('DB_NAME')
 
-env_choose = 'sqlite'  # TODO: remove
-
 if env_choose == 'postgres':
     logger.info('Using postgres DB')
     from .import postgres_model as model

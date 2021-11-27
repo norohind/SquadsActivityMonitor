@@ -1,4 +1,5 @@
 import json
+import os
 import sqlite3
 import typing
 
@@ -14,11 +15,11 @@ logger = get_main_logger()
 logger.propagate = False
 
 db: psycopg2.extensions.connection = psycopg2.connect(
-    user='user2',
-    password='1',
-    host='192.168.1.68',
-    port='5432',
-    database='test0',
+    user=os.environ['DB_USERNAME'],  # user2
+    password=os.environ['DB_PASSWORD'],  # 1
+    host=os.environ['DB_HOSTNAME'],  # 192.168.1.68
+    port=os.environ['DB_PORT'],  # 5432
+    database=os.environ['DB_DATABASE'],  # test0
     cursor_factory=psycopg2.extras.DictCursor)
 
 with db:
