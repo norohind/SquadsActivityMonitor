@@ -21,12 +21,9 @@ timestamp - inserts by DB, default TIMESTAMP
 """
 
 import requests
-import sqlite3
-import model
+from model import model
 # from EDMCLogging import get_main_logger
 import utils
-
-db: sqlite3.Connection = sqlite3.connect('squads_stat.sqlite3')
 
 
 def request_leaderboard(platform_enum: utils.Platform, leaderboard_type_enum: utils.LeaderboardTypes) -> dict:

@@ -1,4 +1,4 @@
-import model
+from model import model
 import json
 import falcon
 import os
@@ -20,8 +20,8 @@ class Activity:
             'platform': platform,
             'leaderboard_type': leaderboard,
             'limit': req.params.get('limit', 10),
-            'high_timestamp': req.params.get('before', 'a'),
-            'low_timestamp': req.params.get('after', 0)
+            'high_timestamp': req.params.get('before', '3307-12-12'),
+            'low_timestamp': req.params.get('after', '0001-01-01')
         }
 
         try:
@@ -37,6 +37,7 @@ class ActivityHtml:
         Activity().on_get(req, resp, leaderboard, platform)
         table_in_json: str = resp.text
         resp.content_type = falcon.MEDIA_HTML
+
         resp.text = utils.activity_table_html_template.replace('{items}', json.dumps(table_in_json))
         # what? f-strings? .format? never heard about them
 

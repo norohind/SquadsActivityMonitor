@@ -10,27 +10,8 @@ name string,
 tag string,
 timestamp default current_timestamp);
 
-create view if not exists current_cqc_pc as
-select * from squads_stats_states where action_id in 
-(select distinct action_id 
-from squads_stats_states 
-where leaderboard_type = 'cqc' and platform = 'PC' 
-order by action_id desc limit 1) and platform = 'PC';
-
-create view if not exists prev_cqc_pc as
-select * 
-from squads_stats_states 
-where action_id in 
-(select distinct action_id 
-from squads_stats_states 
-where leaderboard_type = 'cqc' and platform = 'PC' order by action_id desc limit 1, 1) and platform = 'PC';
-
 create index if not exists idx_action_id_0 on squads_stats_states (action_id);
-create index if not exists idx_platform_leaderboard_type_1 on squads_stats_states(platform, leaderboard_type);
-
-create view if not exists diff_pc_cqc as 
-select current_cqc_pc.name, current_cqc_pc.score, prev_cqc_pc.score, current_cqc_pc.score - prev_cqc_pc.score as diff 
-from current_cqc_pc left outer join prev_cqc_pc on prev_cqc_pc.squadron_id = current_cqc_pc.squadron_id;"""
+create index if not exists idx_platform_leaderboard_type_1 on squads_stats_states(platform, leaderboard_type);"""
 
 select_last_action_id = """select action_id 
 from squads_stats_states
