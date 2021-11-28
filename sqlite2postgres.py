@@ -8,6 +8,7 @@ import sqlite3
 from model import postgres_sql_requests
 import time
 import config
+import sys
 
 insert_pg = """insert into squads_stats_states (action_id, leaderboard_type, platform, squadron_id, score, 
 percentile, rank, name, tag, timestamp) 
@@ -74,7 +75,26 @@ def continues_pull_sqlite_to_postgres() -> None:
             cursor.executemany(insert_pg, new_records)
 
 
-continues_pull_sqlite_to_postgres()
+cli_error = 'argument must be "initial" or "continues"'
+
+if len(sys.argv) != 2:
+    print(cli_error)
+    pg_conn.close()
+    sqlite_conn.close()
+    exit(1)
+
+if sys.argv[1] == 'initial':
+    initial_pull_sqlite_to_postgres()
+    pg_conn.close()
+    sqlite_conn.close()
+
+elif sys.argv[1] == 'continues':
+    continues_pull_sqlite_to_postgres()
+    pg_conn.close()
+    sqlite_conn.close()
+
+else:
+    print(cli_error)
 
 
 pg_conn.close()
