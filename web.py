@@ -2,7 +2,7 @@ from model import model
 import json
 import falcon
 import os
-
+from EDMCLogging import get_main_logger
 import utils
 
 """
@@ -24,6 +24,8 @@ platform - one of
     PC
 """
 
+logger = get_main_logger()
+
 model.open_model()
 
 
@@ -44,6 +46,10 @@ class Activity:
             resp.text = json.dumps(model.get_activity_changes(**args_activity_changes))
 
         except Exception as e:
+            logger.warning(
+                f'Exception occurred during executing Activity request, args:\n{args_activity_changes}',
+                exc_info=e
+            )
             raise falcon.HTTPInternalServerError(description=str(e))
 
 
