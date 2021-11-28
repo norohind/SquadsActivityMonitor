@@ -10,6 +10,8 @@ Request /activity/cqc?platform=pc[&limit=50&after=&before]
 
 """
 
+model.open_model()
+
 
 class Activity:
     def on_get(self, req: falcon.request.Request, resp: falcon.response.Response, leaderboard: str, platform: str)\

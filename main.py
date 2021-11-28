@@ -25,6 +25,8 @@ from model import model
 # from EDMCLogging import get_main_logger
 import utils
 
+model.open_model()
+
 
 def request_leaderboard(platform_enum: utils.Platform, leaderboard_type_enum: utils.LeaderboardTypes) -> dict:
     """

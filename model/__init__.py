@@ -24,7 +24,6 @@ else:
 
     assert False, 'env variable DB_NAME must be "postgres" or "sqlite"'
 
-model.open_model()
 
 model.get_diff_action_id = utils.measure(model.get_diff_action_id)
 model.get_activity_changes = utils.measure(model.get_activity_changes)
