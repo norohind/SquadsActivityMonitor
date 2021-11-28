@@ -7,7 +7,7 @@ import psycopg2.extras
 import sqlite3
 from model import postgres_sql_requests
 import time
-import os
+import config
 
 insert_pg = """insert into squads_stats_states (action_id, leaderboard_type, platform, squadron_id, score, 
 percentile, rank, name, tag, timestamp) 
@@ -19,11 +19,11 @@ sqlite_conn: sqlite3.Connection = sqlite3.connect('squads_stat.sqlite3', check_s
 sqlite_conn.row_factory = lambda c, r: dict(zip([col[0] for col in c.description], r))
 
 pg_conn: psycopg2.extensions.connection = psycopg2.connect(
-        user=os.environ['DB_USERNAME'],
-        password=os.environ['DB_PASSWORD'],
-        host=os.environ['DB_HOSTNAME'],
-        port=os.environ['DB_PORT'],
-        database=os.environ['DB_DATABASE'],
+        user=config.postgres_username,
+        password=config.postgres_password,
+        host=config.postgres_hostname,
+        port=config.postgres_port,
+        database=config.postgres_database_name,
     )
 
 with pg_conn:

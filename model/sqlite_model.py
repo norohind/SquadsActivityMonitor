@@ -2,6 +2,7 @@ import sqlite3
 import typing
 import json
 
+import config
 from . import sqlite_sql_requests
 from .abstract_model import AbstractModel
 from .sqlite_cache import cache
@@ -16,7 +17,7 @@ class Sqlite3Model(AbstractModel):
     db: sqlite3.Connection
 
     def open_model(self):
-        self.db = sqlite3.connect('squads_stat.sqlite3', check_same_thread=False)
+        self.db = sqlite3.connect(config.sqlite_db_path, check_same_thread=False)
 
         logger.debug(f'Connected to squads_stat.sqlite3')
 

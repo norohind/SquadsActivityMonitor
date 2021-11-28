@@ -38,7 +38,6 @@ To utilise logging in a 'found' (third-party) plugin, include this:
 import inspect
 import logging
 import logging.handlers
-import os
 from contextlib import suppress
 from fnmatch import fnmatch
 # So that any warning about accessing a protected member is only in one place.
@@ -47,6 +46,7 @@ from threading import get_native_id as thread_native_id
 from traceback import print_exc
 from typing import TYPE_CHECKING, Tuple, cast
 
+import config
 
 # TODO: Tests:
 #
@@ -438,9 +438,8 @@ def get_main_logger(sublogger_name: str = '') -> 'LoggerMixin':
     #     return cast('LoggerMixin', logging.getLogger(appcmdname))
     return cast('LoggerMixin', logging.getLogger(__name__))
 
-
 # Singleton
-loglevel = logging._nameToLevel.get(os.getenv('LOG_LEVEL', 'DEBUG').upper(), logging.DEBUG)  # noqa:
+loglevel = logging._nameToLevel.get(config.log_level, logging.DEBUG)  # noqa:
 
 base_logger_name = __name__
 

@@ -1,9 +1,9 @@
 import json
-import os
 import typing
 
 import psycopg2.extensions
 import psycopg2.extras
+import config
 
 from .sqlite_cache import cache
 from . import postgres_sql_requests
@@ -20,11 +20,11 @@ class PostgresModel(AbstractModel):
 
     def open_model(self):
         self.db: psycopg2.extensions.connection = psycopg2.connect(
-            user=os.environ['DB_USERNAME'],
-            password=os.environ['DB_PASSWORD'],
-            host=os.environ['DB_HOSTNAME'],
-            port=os.environ['DB_PORT'],
-            database=os.environ['DB_DATABASE'],
+            user=config.postgres_username,
+            password=config.postgres_password,
+            host=config.postgres_hostname,
+            port=config.postgres_port,
+            database=config.postgres_database_name,
             cursor_factory=psycopg2.extras.DictCursor)
 
         logger.info(f'Connected to {self.db.dsn}')

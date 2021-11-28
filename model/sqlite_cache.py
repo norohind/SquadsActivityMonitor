@@ -1,6 +1,6 @@
 import sqlite3
 from EDMCLogging import get_main_logger
-
+import config
 from typing import Union
 
 logger = get_main_logger()
@@ -14,7 +14,7 @@ class Cache:
             return
 
         try:
-            self.db: sqlite3.Connection = sqlite3.connect('squads_stat_cache.sqlite3', check_same_thread=False)
+            self.db: sqlite3.Connection = sqlite3.connect(config.model_cache_db_path, check_same_thread=False)
 
         except Exception as e:
             logger.warning('Cannot create cache DB due to', exc_info=e)
@@ -66,4 +66,4 @@ class Cache:
             self.db.execute('delete from cache;')
 
 
-cache = Cache(True)
+cache = Cache(disabled=config.cache_disabled)

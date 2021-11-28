@@ -1,14 +1,13 @@
 from model.postgres_model import PostgresModel
 from model.sqlite_model import Sqlite3Model
 from model.abstract_model import AbstractModel
-
+import config
 import utils
 from EDMCLogging import get_main_logger
-import os
 
 logger = get_main_logger()
 
-env_choose = os.getenv('DB_NAME')
+env_choose = config.DBMS_name
 
 model: AbstractModel
 
