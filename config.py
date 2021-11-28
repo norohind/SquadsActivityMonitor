@@ -1,6 +1,6 @@
 import os
 
-cache_disabled: bool = bool(os.getenv('CACHE_DISABLED', True))
+cache_disabled: bool = os.getenv('CACHE_DISABLED', 'True').lower() == 'true'
 
 DBMS_name = os.getenv('DB_NAME')
 
