@@ -181,7 +181,7 @@ activity_table_html_template = """
         <script src="/js/json2htmltable.js"></script>
          <script type="text/javascript">
             window.onload = () => {
-                document.body.appendChild(buildHtmlTable(JSON.parse({items})));  // build table
+                document.body.appendChild(buildHtmlTable({items}));  // build table
 
                 var table = document.querySelector("body > table")
                 var header = table.rows[0]
