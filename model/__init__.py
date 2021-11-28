@@ -24,6 +24,6 @@ else:
 
     assert False, 'env variable DB_NAME must be "postgres" or "sqlite"'
 
-
-model.get_diff_action_id = utils.measure(model.get_diff_action_id)
-model.get_activity_changes = utils.measure(model.get_activity_changes)
+if config.log_level == 'DEBUG':
+    model.get_diff_action_id = utils.measure(model.get_diff_action_id)
+    model.get_activity_changes = utils.measure(model.get_activity_changes)
