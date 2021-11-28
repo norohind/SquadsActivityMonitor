@@ -20,11 +20,11 @@ class PostgresModel(AbstractModel):
 
     def open_model(self):
         self.db: psycopg2.extensions.connection = psycopg2.connect(
-            user=os.environ['DB_USERNAME'],  # user2
-            password=os.environ['DB_PASSWORD'],  # 1
-            host=os.environ['DB_HOSTNAME'],  # 192.168.1.68
-            port=os.environ['DB_PORT'],  # 5432
-            database=os.environ['DB_DATABASE'],  # test0
+            user=os.environ['DB_USERNAME'],
+            password=os.environ['DB_PASSWORD'],
+            host=os.environ['DB_HOSTNAME'],
+            port=os.environ['DB_PORT'],
+            database=os.environ['DB_DATABASE'],
             cursor_factory=psycopg2.extras.DictCursor)
 
         logger.info(f'Connected to {self.db.dsn}')
