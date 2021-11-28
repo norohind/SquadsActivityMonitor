@@ -15,3 +15,5 @@ model_cache_db_path = os.getenv('CACHE_PATH', 'squads_stat_cache.sqlite3')
 sqlite_db_path = os.getenv('SQLITE_DB_PATH', 'squads_stat.sqlite3')
 
 log_level = os.getenv('LOG_LEVEL', 'DEBUG').upper()
+
+time_between_requests = os.getenv("TIME_BETWEEN_REQUESTS")

@@ -5,15 +5,15 @@ import enum
 
 import falcon
 import requests
-
+import config
 from EDMCLogging import get_main_logger
 
 logger = get_main_logger()
 
 TIME_BETWEEN_REQUESTS: float = 3.0
-if os.getenv("JUBILANT_TIME_BETWEEN_REQUESTS") is not None:
+if config.time_between_requests is not None:
     try:
-        TIME_BETWEEN_REQUESTS = float(os.getenv("JUBILANT_TIME_BETWEEN_REQUESTS"))
+        TIME_BETWEEN_REQUESTS = float(config.time_between_requests)
 
     except TypeError:  # env doesn't contain a float
         pass
