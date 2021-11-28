@@ -21,8 +21,9 @@ elif env_choose == 'sqlite':
     model = Sqlite3Model()
 
 else:
-    logger.info('Using sqlite DB')
-    model = Sqlite3Model()
+    logger.error(f'Unknown DB {env_choose!r}')
+
+    assert False, 'env variable DB_NAME must be "postgres" or "sqlite"'
 
 model.open_model()
 

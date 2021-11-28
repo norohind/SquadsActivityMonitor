@@ -27,12 +27,15 @@ class PostgresModel(AbstractModel):
             database=os.environ['DB_DATABASE'],  # test0
             cursor_factory=psycopg2.extras.DictCursor)
 
+        logger.info(f'Connected to {self.db.dsn}')
+
         with self.db:
             with self.db.cursor() as cursor:
                 cursor.execute(postgres_sql_requests.schema_create)  # schema creation
 
     def close_model(self):
         self.db.close()
+        logger.info(f'Connection to {self.db.dsn} closed successfully')
 
     def get_activity_changes(self, platform: str, leaderboard_type: str, limit: int, low_timestamp, high_timestamp)\
             -> list:

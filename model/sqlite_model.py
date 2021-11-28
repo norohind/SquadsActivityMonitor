@@ -18,6 +18,8 @@ class Sqlite3Model(AbstractModel):
     def open_model(self):
         self.db = sqlite3.connect('squads_stat.sqlite3', check_same_thread=False)
 
+        logger.debug(f'Connected to squads_stat.sqlite3')
+
         self.db.executescript(sqlite_sql_requests.schema_create)  # schema creation
 
         # thx https://stackoverflow.com/a/48789604
@@ -25,6 +27,7 @@ class Sqlite3Model(AbstractModel):
 
     def close_model(self):
         self.db.close()
+        logger.info(f'Connection to squads_stat.sqlite3 closed successfully')
 
     def get_activity_changes(self, platform: str, leaderboard_type: str, limit: int, low_timestamp, high_timestamp)\
             -> list:
