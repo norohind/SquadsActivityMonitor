@@ -24,22 +24,6 @@ percentile, rank, name, tag)
 values 
 (%(action_id)s, %(LB_type)s, %(platform)s, %(squadron)s, %(score)s, %(percentile)s, %(rank)s, %(name)s, %(tag)s);"""
 
-select_activity = """select *, sum_score - sum_score_old as diff from 
-(select sum_score, min(timestamp) as timestamp, action_id, lag (sum_score, 1, 0) over (order by sum_score) sum_score_old 
-from (
-    select sum(score) as sum_score, timestamp, action_id 
-    from squads_stats_states 
-    where 
-        leaderboard_type = :LB_type and 
-        platform = :platform and
-        :high_timestamp >=  timestamp and 
-        timestamp >= :low_timestamp 
-    group by action_id
-    ) 
-group by sum_score 
-order by timestamp desc 
-limit :limit);"""
-
 select_activity_pretty_names = """select 
 sum_score::bigint as "TotalExperience", 
 to_char(timestamp, 'YYYY-MM-DD HH24:MI:SS') as "Timestamp UTC",
@@ -71,13 +55,13 @@ where (sum_score - sum_score_old) > 0
 limit %(limit)s;"""
 
 select_diff_by_action_id = """select 
-    new_stats.name as SquadronName,
+    new_stats.name as "SquadronName",
     new_stats.tag, 
-    new_stats.score as TotalExperience, 
-    old_stats.score as TotalExperienceOld, 
-    new_stats.score - old_stats.score as TotalExperienceDiff, 
-    new_stats.leaderboard_type as LeaderBoardType, 
-    new_stats.platform as Platform
+    new_stats.score as "TotalExperience", 
+    old_stats.score as "TotalExperienceOld", 
+    new_stats.score - old_stats.score as "TotalExperienceDiff", 
+    new_stats.leaderboard_type as "LeaderBoardType", 
+    new_stats.platform as "Platform"
 from (
     select * 
     from squads_stats_states 
