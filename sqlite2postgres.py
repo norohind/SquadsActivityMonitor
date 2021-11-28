@@ -30,21 +30,52 @@ with pg_conn:
     with pg_conn.cursor() as cursor:
         cursor.execute(postgres_sql_requests.schema_create)
 
-with pg_conn:
-    with pg_conn.cursor() as cursor:
-        start = time.time()
 
-        insert_statement = ''
-        sqlite_content = sqlite_conn.execute('select * from squads_stats_states;').fetchall()
-        # for row in sqlite_content:
-        #     # cursor.execute(insert_pg, row)
-        #     insert_statement += cursor.mogrify(insert_pg, row).decode('utf-8')
+def initial_pull_sqlite_to_postgres() -> None:
+    """
+    Function for initial transferring data from sqlite to postgres
 
-        # print((time.time() - start) * 100, 'ms for creating insert_statement')
-        # print('inserting')
-        cursor.executemany(insert_pg, sqlite_content)
-        # 149619.26856040955 ms total
-        print((time.time() - start) * 100, 'ms total')
+    :return:
+    """
+
+    with pg_conn:
+        with pg_conn.cursor() as cursor:
+            start = time.time()
+
+            insert_statement = ''
+            sqlite_content = sqlite_conn.execute('select * from squads_stats_states;').fetchall()
+            # for row in sqlite_content:
+            #     # cursor.execute(insert_pg, row)
+            #     insert_statement += cursor.mogrify(insert_pg, row).decode('utf-8')
+
+            # print((time.time() - start) * 100, 'ms for creating insert_statement')
+            # print('inserting')
+            cursor.executemany(insert_pg, sqlite_content)
+            # 149619.26856040955 ms total
+            print((time.time() - start) * 100, 'ms total')
+
+
+def continues_pull_sqlite_to_postgres() -> None:
+    """
+    Function to synchronize data from sqlite to postgres table
+
+    :return:
+    """
+
+    with pg_conn:
+        with pg_conn.cursor() as cursor:
+            cursor: psycopg2.extensions.cursor
+            cursor.execute('select action_id from squads_stats_states order by action_id desc limit 1;')
+            last_action_id_postgres: int = cursor.fetchone()[0]
+
+            new_records = sqlite_conn.execute('select * from squads_stats_states where action_id > :action_id;',
+                                              {'action_id': last_action_id_postgres}).fetchall()
+
+            cursor.executemany(insert_pg, new_records)
+
+
+continues_pull_sqlite_to_postgres()
+
 
 pg_conn.close()
 sqlite_conn.close()
