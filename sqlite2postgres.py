@@ -15,7 +15,7 @@ values
 (%(action_id)s, %(leaderboard_type)s, %(platform)s, %(squadron_id)s, %(score)s, 
 %(percentile)s, %(rank)s, %(name)s, %(tag)s, %(timestamp)s);"""
 
-sqlite_conn: sqlite3.Connection = sqlite3.connect('squads_stat.sqlite3', check_same_thread=False)
+sqlite_conn: sqlite3.Connection = sqlite3.connect(config.sqlite2postgres_sqlite_location, check_same_thread=False)
 sqlite_conn.row_factory = lambda c, r: dict(zip([col[0] for col in c.description], r))
 
 pg_conn: psycopg2.extensions.connection = psycopg2.connect(
