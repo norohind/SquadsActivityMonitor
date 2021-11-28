@@ -4,6 +4,7 @@ import falcon
 import os
 from EDMCLogging import get_main_logger
 import utils
+from model.sqlite_cache import cache
 
 """
 /leaderboard/{leaderboard_type}/platform/{platform}?[limit=<int>
@@ -96,7 +97,7 @@ class MainPage:
 class Cache:
     def on_post(self, req: falcon.request.Request, resp: falcon.response.Response, action: str) -> None:
         if action.lower() == 'drop':
-            model.cache.delete_all()
+            cache.delete_all()
             resp.status = falcon.HTTP_204
             return
 
