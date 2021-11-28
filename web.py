@@ -6,8 +6,22 @@ import os
 import utils
 
 """
-Request /activity/cqc?platform=pc[&limit=50&after=&before]
+/leaderboard/{leaderboard_type}/platform/{platform}?[limit=<int>
+    &after=<timestamp (as "Timestamp UTC" column format)>&after=<timestamp (as "Timestamp UTC" column format)>]
+    
+leaderboard_type - one of
+    powerplay
+    cqc
+    trade
+    exploration
+    aegis
+    bgs
+    combat
 
+platform - one of
+    XBOX
+    PS4
+    PC
 """
 
 model.open_model()
