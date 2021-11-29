@@ -180,9 +180,9 @@ activity_table_html_template = """<!DOCTYPE HTML>
         <script src="/js/json2htmltable.js"></script>
          <script type="text/javascript">
             window.addEventListener("load", () => {
-                document.body.appendChild(buildHtmlTable({items}));  // build table
+                document.getElementById('table0div').appendChild(buildHtmlTable({items}));  // build table
 
-                var table = document.querySelector("body > table")
+                var table = document.querySelector("#table0div > table")
                 var header = table.rows[0]
 
                 for (var i = 0, cell; cell = header.cells[i]; i++){
@@ -196,7 +196,7 @@ activity_table_html_template = """<!DOCTYPE HTML>
                     return;
                 }
 
-                for (var i = 1, row; row = table.rows[i]; i++) {  // append to action_id filed onclick action
+                for (var i = 1, row; row = table.rows[i]; i++) {  // append to target column filed href
                    row.cells[target_column_id].innerHTML = '<td><a href="{link}">{original_value}</a></td>'.replace('{link}', '{target_new_url}' + table.rows[i].cells[target_column_id].innerText).replace('{original_value}', table.rows[i].cells[target_column_id].innerText);
                 }
             })
@@ -204,6 +204,8 @@ activity_table_html_template = """<!DOCTYPE HTML>
         <link type="text/css" rel="stylesheet" href="/js/table_styles.css">
     </head>
     <body>
+     <div id="table0div">
+     </div>
     </body>
 </html>"""
 
