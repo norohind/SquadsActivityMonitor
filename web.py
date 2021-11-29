@@ -61,7 +61,9 @@ class ActivityHtml:
         table_in_json: str = resp.text
         resp.content_type = falcon.MEDIA_HTML
 
-        resp.text = utils.activity_table_html_template.replace('{items}', table_in_json).replace('{target_column_name}', 'ActionId').replace('{target_new_url}', '/diff/')
+        resp.text = utils.activity_table_html_template.replace(
+            '{items}', table_in_json
+        ).replace('{target_column_name}', 'ActionId').replace('{target_new_url}', '/diff/')
         # what? f-strings? .format? never heard about them
 
 
@@ -86,7 +88,8 @@ class ActivityDiffHtml:
         # table: str = json.dumps(model.get_diff_action_id(action_id))
         resp.text = utils.activity_table_html_template.replace(
             '{items}', json.dumps(model.get_diff_action_id(action_id))
-        )
+        ).replace('{target_column_name}', 'tag').replace('{target_new_url}', '/jub/squads/now/by-tag/')
+
 
 
 class MainPage:
