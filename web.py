@@ -61,7 +61,7 @@ class ActivityHtml:
         table_in_json: str = resp.text
         resp.content_type = falcon.MEDIA_HTML
 
-        resp.text = utils.activity_table_html_template.replace('{items}', table_in_json)
+        resp.text = utils.activity_table_html_template.replace('{items}', table_in_json).replace('{target_column_name}', 'ActionId').replace('{target_new_url}', '/diff/')
         # what? f-strings? .format? never heard about them
 
 
