@@ -55,13 +55,13 @@ where (sum_score - sum_score_old) <> 0
 limit %(limit)s;"""
 
 select_diff_by_action_id = """select 
-    new_stats.name as "SquadronName",
-    new_stats.tag, 
+    coalesce(new_stats.name, old_stats.name) as "SquadronName",
+    coalesce(new_stats.tag, old_stats.tag), 
     coalesce(new_stats.score, 0) as "TotalExperience", 
     coalesce(old_stats.score, 0) as "TotalExperienceOld", 
     coalesce(new_stats.score, 0) - coalesce(old_stats.score, 0) as "TotalExperienceDiff", 
-    new_stats.leaderboard_type as "LeaderBoardType", 
-    new_stats.platform as "Platform"
+    old_stats.leaderboard_type as "LeaderBoardType", 
+    old_stats.platform as "Platform"
 from (
     select * 
     from squads_stats_states 
