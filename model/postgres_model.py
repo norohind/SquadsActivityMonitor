@@ -15,6 +15,20 @@ logger = get_main_logger()
 logger.propagate = False
 
 
+def errors_catcher(func: callable) -> callable:
+    def decorated(*args, **kwargs):
+        try:
+            result = func(*args, **kwargs)
+
+        except psycopg2.InterfaceError:
+            args[0].open_model()
+            result = func(*args, **kwargs)
+
+        return result
+
+    return decorated
+
+
 class PostgresModel(AbstractModel):
     db: psycopg2.extensions.connection
 
@@ -37,6 +51,7 @@ class PostgresModel(AbstractModel):
         self.db.close()
         logger.info(f'Connection to {self.db.dsn} closed successfully')
 
+    @errors_catcher
     def get_activity_changes(self, platform: str, leaderboard_type: str, limit: int, low_timestamp, high_timestamp)\
             -> list:
         cache_key: str = f'{platform}_{leaderboard_type}_{limit}_{low_timestamp}_{high_timestamp}'
@@ -65,6 +80,7 @@ class PostgresModel(AbstractModel):
 
         return result
 
+    @errors_catcher
     def insert_leaderboard_db(self, leaderboard_list: dict) -> None:
         """
         Takes leaderboard as list, it platform, type, db connection and insert leaderboard to DB
@@ -102,6 +118,7 @@ class PostgresModel(AbstractModel):
 
         cache.delete_all()  # drop cache
 
+    @errors_catcher
     def get_diff_action_id(self, action_id: int) -> list:
         """
         Takes action_id and returns which squadrons has been changed in leaderboard as in action_id and
