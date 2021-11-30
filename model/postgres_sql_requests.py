@@ -56,7 +56,7 @@ limit %(limit)s;"""
 
 select_diff_by_action_id = """select 
     coalesce(new_stats.name, old_stats.name) as "SquadronName",
-    coalesce(new_stats.tag, old_stats.tag), 
+    coalesce(new_stats.tag, old_stats.tag) as "Tag", 
     coalesce(new_stats.score, 0) as "TotalExperience", 
     coalesce(old_stats.score, 0) as "TotalExperienceOld", 
     coalesce(new_stats.score, 0) - coalesce(old_stats.score, 0) as "TotalExperienceDiff", 
