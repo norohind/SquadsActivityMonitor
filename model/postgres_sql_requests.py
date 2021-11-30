@@ -57,16 +57,16 @@ limit %(limit)s;"""
 select_diff_by_action_id = """select 
     new_stats.name as "SquadronName",
     new_stats.tag, 
-    new_stats.score as "TotalExperience", 
-    old_stats.score as "TotalExperienceOld", 
-    new_stats.score - old_stats.score as "TotalExperienceDiff", 
+    coalesce(new_stats.score, 0) as "TotalExperience", 
+    coalesce(old_stats.score, 0) as "TotalExperienceOld", 
+    coalesce(new_stats.score, 0) - coalesce(old_stats.score, 0) as "TotalExperienceDiff", 
     new_stats.leaderboard_type as "LeaderBoardType", 
     new_stats.platform as "Platform"
 from (
     select * 
     from squads_stats_states 
     where action_id = %(action_id)s) new_stats 
-inner join 
+full join 
     (
         select * 
         from squads_stats_states 
@@ -83,5 +83,5 @@ inner join
                             order by squads_stats_states.action_id desc 
                             limit 1)) old_stats 
 on new_stats.squadron_id = old_stats.squadron_id 
-where new_stats.score - old_stats.score > 0
+where coalesce(new_stats.score, 0) - coalesce(old_stats.score, 0) <> 0
 order by new_stats.score - old_stats.score desc;"""

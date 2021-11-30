@@ -13,7 +13,7 @@ function buildHtmlTable(arr) {
     for (var j = 0, maxj = columns.length; j < maxj; ++j) {
       var td = _td_.cloneNode(false);
       cellValue = arr[i][columns[j]];
-      td.appendChild(document.createTextNode(arr[i][columns[j]] || ''));
+      td.appendChild(document.createTextNode(arr[i][columns[j]]));
       tr.appendChild(td);
     }
     table.appendChild(tr);
