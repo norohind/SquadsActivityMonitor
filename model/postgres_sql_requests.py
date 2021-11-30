@@ -51,7 +51,7 @@ from
     order by timestamp desc 
     
     ) as foo1
-where (sum_score - sum_score_old) > 0 
+where (sum_score - sum_score_old) <> 0 
 limit %(limit)s;"""
 
 select_diff_by_action_id = """select 
