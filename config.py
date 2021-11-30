@@ -2,8 +2,6 @@ import os
 
 cache_disabled: bool = os.getenv('CACHE_DISABLED', 'True').lower() == 'true'
 
-DBMS_name = os.getenv('DB_NAME')
-
 postgres_username = os.getenv('DB_USERNAME')
 postgres_password = os.getenv('DB_PASSWORD')
 postgres_hostname = os.getenv('DB_HOSTNAME')
