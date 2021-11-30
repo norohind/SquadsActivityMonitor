@@ -60,8 +60,8 @@ select_diff_by_action_id = """select
     coalesce(new_stats.score, 0) as "TotalExperience", 
     coalesce(old_stats.score, 0) as "TotalExperienceOld", 
     coalesce(new_stats.score, 0) - coalesce(old_stats.score, 0) as "TotalExperienceDiff", 
-    old_stats.leaderboard_type as "LeaderBoardType", 
-    old_stats.platform as "Platform"
+    coalesce(new_stats.leaderboard_type, old_stats.leaderboard_type) as "LeaderBoardType", 
+    coalesce(new_stats.platform, old_stats.platform) as "Platform"
 from (
     select * 
     from squads_stats_states 
