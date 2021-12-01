@@ -84,4 +84,4 @@ full join
                             limit 1)) old_stats 
 on new_stats.squadron_id = old_stats.squadron_id 
 where coalesce(new_stats.score, 0) - coalesce(old_stats.score, 0) <> 0
-order by new_stats.score - old_stats.score desc;"""
+order by coalesce(new_stats.score, 0) - coalesce(old_stats.score, 0) desc;"""
