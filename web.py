@@ -119,9 +119,6 @@ app.add_route('/', MainPage())
 
 application = app  # for uwsgi
 
-# index_file = os.path.join(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static'), 'index.html')
-
-# utils.build_index_page(app, index_file)
 
 if __name__ == '__main__':
     import waitress

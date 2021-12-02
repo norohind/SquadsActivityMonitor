@@ -141,15 +141,6 @@ def _get_bearer() -> str:
     return bearer
 
 
-def build_index_page(app: falcon.App, index_path: str) -> None:
-    with open(index_path, 'w', encoding='utf-8') as index_file:  # kinda documentation on main page
-        from falcon import inspect
-        app_info = inspect.inspect_app(app)
-        app_info_str = app_info.__str__().replace('\n', '<br>')
-
-        index_file.write(index_template.format(body=app_info_str))
-
-
 def measure(function: callable):
     """
     Decorator to measure function (method) execution time
@@ -204,8 +195,13 @@ activity_table_html_template = """<!DOCTYPE HTML>
         <link type="text/css" rel="stylesheet" href="/js/table_styles.css">
     </head>
     <body>
-     <div id="table0div">
-     </div>
+        <div id="table0div">
+        </div>
+        <div id=footer0div>
+            <footer>
+                <a href="/">Main page</a>
+            </footer>
+        </div>
     </body>
 </html>"""
 
