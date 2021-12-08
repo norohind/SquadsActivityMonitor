@@ -63,17 +63,16 @@ class PostgresModel(AbstractModel):
 
         logger.debug(f'Not cached result for {cache_key}')
 
-        with self.db:
-            with self.db.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cursor:
-                cursor.execute(postgres_sql_requests.select_activity_pretty_names, {
-                    'LB_type': utils.LeaderboardTypes(leaderboard_type.lower()).value,
-                    'platform': utils.Platform(platform.upper()).value,
-                    'limit': limit,
-                    'high_timestamp': high_timestamp,
-                    'low_timestamp': low_timestamp
-                })
+        with self.db.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cursor:
+            cursor.execute(postgres_sql_requests.select_activity_pretty_names, {
+                'LB_type': utils.LeaderboardTypes(leaderboard_type.lower()).value,
+                'platform': utils.Platform(platform.upper()).value,
+                'limit': limit,
+                'high_timestamp': high_timestamp,
+                'low_timestamp': low_timestamp
+            })
 
-                result: list = cursor.fetchall()
+            result: list = cursor.fetchall()
 
         if not cache.disabled:
             cache.set(cache_key, json.dumps(result))
@@ -136,10 +135,9 @@ class PostgresModel(AbstractModel):
 
         logger.debug(f'Not cached result for {cache_key}')
 
-        with self.db:
-            with self.db.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cursor:
-                cursor.execute(postgres_sql_requests.select_diff_by_action_id, {'action_id': action_id})
-                result: list = cursor.fetchall()
+        with self.db.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cursor:
+            cursor.execute(postgres_sql_requests.select_diff_by_action_id, {'action_id': action_id})
+            result: list = cursor.fetchall()
 
         if not cache.disabled:
             cache.set(cache_key, json.dumps(result))
