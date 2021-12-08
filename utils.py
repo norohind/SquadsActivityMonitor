@@ -141,7 +141,7 @@ def _get_bearer() -> str:
     return bearer
 
 
-def measure(function: callable):
+def measure(function: callable, name_to_display: str):
     """
     Decorator to measure function (method) execution time
     Use as easy as
@@ -150,6 +150,7 @@ def measure(function: callable):
     def im_function_to_measure():
         ....
 
+    :param name_to_display:
     :param function:
     :return:
     """
@@ -158,7 +159,7 @@ def measure(function: callable):
         start = time.time()
         result = function(*args, **kwargs)
         end = time.time()
-        print(f'{function.__name__}: {(end - start) * 100} ms')
+        print(f'{name_to_display}:{function.__name__}: {(end - start) * 100} ms')
         return result
 
     return decorated
