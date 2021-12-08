@@ -6,6 +6,7 @@ master = 1
 vacuum = true
 socket = 127.0.0.1:8082
 enable-threads = true
+die-on-term = true
 thunder-lock = true
 threads = {threads}
 processes = {processes}
