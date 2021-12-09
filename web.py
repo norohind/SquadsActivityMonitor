@@ -95,6 +95,33 @@ class ActivityDiffHtml:
         )
 
 
+class SumLeaderboardHistory:
+    def on_get(self, req: falcon.request.Request, resp: falcon.response.Response, leaderboard: str, platform: str)\
+            -> None:
+        resp.content_type = falcon.MEDIA_JSON
+
+        try:
+            resp.text = json.dumps(model.get_leaderboard_sum_history(platform, leaderboard))
+
+        except Exception as e:
+            logger.warning(
+                f'Exception occurred during executing history request, LB: {leaderboard!r}; platform: {platform!r}',
+                exc_info=e
+            )
+            raise falcon.HTTPInternalServerError(description=str(e))
+
+
+class SumLeaderboardHistoryHtml:
+    def on_get(self, req: falcon.request.Request, resp: falcon.response.Response, leaderboard: str, platform: str)\
+            -> None:
+        resp.content_type = falcon.MEDIA_HTML
+        resp.text = render(
+            'graph_template.html',
+            {
+                'dataset_title': f'{leaderboard} {platform} points sum'
+            })
+
+
 class MainPage:
     def on_get(self, req: falcon.request.Request, resp: falcon.response.Response) -> None:
         raise falcon.HTTPMovedPermanently('/index.html')
@@ -113,9 +140,12 @@ class Cache:
 app = falcon.App()
 app.add_route('/api/leaderboard/{leaderboard}/platform/{platform}', Activity())
 app.add_route('/api/diff/{action_id}', ActivityDiff())
+app.add_route('/leaderboard-history/leaderboard/{leaderboard}/platform/{platform}', SumLeaderboardHistoryHtml())
 
 app.add_route('/leaderboard/{leaderboard}/platform/{platform}', ActivityHtml())
 app.add_route('/diff/{action_id}', ActivityDiffHtml())
+app.add_route('/api/leaderboard-history/leaderboard/{leaderboard}/platform/{platform}', SumLeaderboardHistory())
+
 
 app.add_route('/api/cache/{action}', Cache())
 

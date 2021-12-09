@@ -85,3 +85,13 @@ full join
 on new_stats.squadron_id = old_stats.squadron_id 
 where coalesce(new_stats.score, 0) - coalesce(old_stats.score, 0) <> 0
 order by coalesce(new_stats.score, 0) - coalesce(old_stats.score, 0) desc;"""
+
+select_leaderboard_sum_history = """select 
+    sum(score)::bigint as "Score Sum", 
+    to_char(max(timestamp), 'YYYY-MM-DD HH24:MI:SS') as "Timestamp UTC"
+from squads_stats_states 
+where leaderboard_type = %(LB_type)s and platform = %(platform)s 
+group by action_id 
+order by "Timestamp UTC" desc
+limit 1000;
+"""

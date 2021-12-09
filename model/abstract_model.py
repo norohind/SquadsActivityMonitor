@@ -23,3 +23,7 @@ class AbstractModel(abc.ABC):
     @abc.abstractmethod
     def get_diff_action_id(self, action_id: int) -> list:
         raise NotImplemented
+
+    @abc.abstractmethod
+    def get_leaderboard_sum_history(self, platform: str, leaderboard_type: str) -> list[dict]:
+        raise NotImplemented

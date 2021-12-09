@@ -1,0 +1,58 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+    <head>
+        <meta charset="UTF-8">
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script type="text/javascript">
+            window.addEventListener("load", () => {
+                let xhr = new XMLHttpRequest();
+                let api_endpoint = location.protocol + '//' + location.host + '/api' + location.pathname + location.search;
+                xhr.open('GET', api_endpoint)
+
+                xhr.onload = function() {
+                    received_data = JSON.parse(xhr.response);
+                    labels = [];
+                    data_array = [];
+                    for (item_id in received_data) {
+                        item = received_data[item_id]
+                        labels.push(item["Timestamp UTC"]);
+                        data_array.push(item["Score Sum"]);
+                    }
+
+                    const data = {
+                      labels: labels.reverse(),
+                      datasets: [{
+                        label: ' {{ dataset_title }} ',
+                        backgroundColor: 'rgb(255, 99, 132)',
+                        borderColor: 'rgb(255, 99, 132)',
+                        data: data_array.reverse(),
+                      }]
+                    };
+
+                    const config = {
+                      type: 'line',
+                      data: data,
+                      options: {}
+                    };
+
+                    const myChart = new Chart(
+                      document.getElementById('myChart'),
+                      config
+                    );
+                }
+
+                xhr.onerror = function() {
+                    alert('Loading Error');
+                };
+
+                xhr.send()
+            })
+        </script>
+    </head>
+    <body>
+        <div>
+            <canvas id="myChart"></canvas>
+        </div>
+        {{ @footer.html }}
+    </body>
+</html>
