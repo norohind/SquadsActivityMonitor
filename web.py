@@ -5,6 +5,7 @@ import os
 from EDMCLogging import get_main_logger
 import utils
 from model.sqlite_cache import cache
+from templates_engine import render
 
 """
 /leaderboard/{leaderboard_type}/platform/{platform}?[limit=<int>
@@ -57,14 +58,14 @@ class Activity:
 class ActivityHtml:
     def on_get(self, req: falcon.request.Request, resp: falcon.response.Response, leaderboard: str, platform: str)\
             -> None:
-        Activity().on_get(req, resp, leaderboard, platform)
-        table_in_json: str = resp.text
         resp.content_type = falcon.MEDIA_HTML
 
-        resp.text = utils.activity_table_html_template.replace(
-            '{items}', table_in_json
-        ).replace('{target_column_name}', 'ActionId').replace('{target_new_url}', '/diff/')
-        # what? f-strings? .format? never heard about them
+        resp.text = render(
+            'table_template.html',
+            {
+                'target_column_name': 'ActionId',
+                'target_new_url': '/diff/',
+             })
 
 
 class ActivityDiff:
@@ -85,10 +86,13 @@ class ActivityDiff:
 class ActivityDiffHtml:
     def on_get(self, req: falcon.request.Request, resp: falcon.response.Response, action_id: int) -> None:
         resp.content_type = falcon.MEDIA_HTML
-        # table: str = json.dumps(model.get_diff_action_id(action_id))
-        resp.text = utils.activity_table_html_template.replace(
-            '{items}', json.dumps(model.get_diff_action_id(action_id))
-        ).replace('{target_column_name}', 'Tag').replace('{target_new_url}', '/jub/squads/now/by-tag/')
+        resp.text = render(
+            'table_template.html',
+            {
+                'target_column_name': 'Tag',
+                'target_new_url': '/jub/squads/now/by-tag/'
+            }
+        )
 
 
 class MainPage:
