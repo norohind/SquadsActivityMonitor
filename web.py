@@ -90,7 +90,7 @@ class ActivityDiffHtml:
             'table_template.html',
             {
                 'target_column_name': 'Tag',
-                'target_new_url': '/jub/squads/now/by-tag/short/'
+                'target_new_url': '/squads/now/by-tag/short/'
             }
         )
 
