@@ -129,6 +129,18 @@ class LeaderboardByActionID:
         resp.text = json.dumps(model.get_diff_action_id(action_id))
 
 
+class LeaderboardByActionIDHTML:
+    def on_get(self, req: falcon.request.Request, resp: falcon.response.Response, action_id: int) -> None:
+        resp.content_type = falcon.MEDIA_HTML
+        resp.text = render(
+            'table_template.html',
+            {
+                'target_column_name': 'Tag',
+                'target_new_url': '/squads/now/by-tag/short/'
+            }
+        )
+
+
 class MainPage:
     def on_get(self, req: falcon.request.Request, resp: falcon.response.Response) -> None:
         raise falcon.HTTPMovedPermanently('/index.html')
@@ -153,6 +165,7 @@ app.add_route('/api/leaderboard-state/by-action-id/{action_id}', LeaderboardByAc
 app.add_route('/leaderboard/{leaderboard}/platform/{platform}', ActivityHtml())
 app.add_route('/diff/{action_id}', ActivityDiffHtml())
 app.add_route('/leaderboard-history/leaderboard/{leaderboard}/platform/{platform}', SumLeaderboardHistoryHtml())
+app.add_route('/leaderboard-state/by-action-id/{action_id}', LeaderboardByActionIDHTML())
 
 
 app.add_route('/api/cache/{action}', Cache())
