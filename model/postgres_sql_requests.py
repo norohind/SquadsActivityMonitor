@@ -95,3 +95,10 @@ group by action_id
 order by "Timestamp UTC" desc
 limit 1000;
 """
+
+select_leaderboard_by_action_id = """select
+    *
+from squads_stats_states
+where action_id = %(action_id)s
+order by score desc;
+"""

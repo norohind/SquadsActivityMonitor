@@ -166,3 +166,27 @@ class PostgresModel(AbstractModel):
             cache.set(cache_key, json.dumps(result))
 
         return result
+
+    def get_leaderboard_by_action_id(self, action_id: int) -> list[dict]:
+        cache_key = f'leaderboard_by_action_id_{action_id}'
+
+        cached_result: typing.Union[str, None] = cache.get(cache_key)
+
+        if cached_result is not None:
+            logger.debug(f'Cached result for {cache_key}')
+            return json.loads(cached_result)
+
+        with self.db.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cursor:
+            cursor.execute(
+                postgres_sql_requests.select_last_action_id,
+                {
+                    'action_id': action_id
+                }
+            )
+
+            result: list[dict] = cursor.fetchall()
+
+        if not cache.disabled:
+            cache.set(cache_key, json.dumps(result))
+
+        return result

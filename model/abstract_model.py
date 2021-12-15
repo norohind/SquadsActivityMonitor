@@ -27,3 +27,7 @@ class AbstractModel(abc.ABC):
     @abc.abstractmethod
     def get_leaderboard_sum_history(self, platform: str, leaderboard_type: str) -> list[dict]:
         raise NotImplemented
+
+    @abc.abstractmethod
+    def get_leaderboard_by_action_id(self, action_id: int) -> list[dict]:
+        raise NotImplemented

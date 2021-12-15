@@ -119,7 +119,14 @@ class SumLeaderboardHistoryHtml:
             'graph_template.html',
             {
                 'dataset_title': f'{leaderboard} {platform} points sum'
-            })
+            }
+        )
+
+
+class LeaderboardByActionID:
+    def on_get(self, req: falcon.request.Request, resp: falcon.response.Response, action_id: int) -> None:
+        resp.content_type = falcon.MEDIA_JSON
+        resp.text = json.dumps(model.get_diff_action_id(action_id))
 
 
 class MainPage:
@@ -140,11 +147,12 @@ class Cache:
 app = falcon.App()
 app.add_route('/api/leaderboard/{leaderboard}/platform/{platform}', Activity())
 app.add_route('/api/diff/{action_id}', ActivityDiff())
-app.add_route('/leaderboard-history/leaderboard/{leaderboard}/platform/{platform}', SumLeaderboardHistoryHtml())
+app.add_route('/api/leaderboard-history/leaderboard/{leaderboard}/platform/{platform}', SumLeaderboardHistory())
+app.add_route('/api/leaderboard-state/by-action-id/{action_id}', LeaderboardByActionID())
 
 app.add_route('/leaderboard/{leaderboard}/platform/{platform}', ActivityHtml())
 app.add_route('/diff/{action_id}', ActivityDiffHtml())
-app.add_route('/api/leaderboard-history/leaderboard/{leaderboard}/platform/{platform}', SumLeaderboardHistory())
+app.add_route('/leaderboard-history/leaderboard/{leaderboard}/platform/{platform}', SumLeaderboardHistoryHtml())
 
 
 app.add_route('/api/cache/{action}', Cache())
