@@ -126,7 +126,7 @@ class SumLeaderboardHistoryHtml:
 class LeaderboardByActionID:
     def on_get(self, req: falcon.request.Request, resp: falcon.response.Response, action_id: int) -> None:
         resp.content_type = falcon.MEDIA_JSON
-        resp.text = json.dumps(model.get_diff_action_id(action_id))
+        resp.text = json.dumps(model.get_leaderboard_by_action_id(action_id))
 
 
 class LeaderboardByActionIDHTML:
@@ -136,7 +136,7 @@ class LeaderboardByActionIDHTML:
             'table_template.html',
             {
                 'target_column_name': 'Tag',
-                'target_new_url': '/squads/now/by-tag/short/'
+                'target_new_url': '/api/leaderboard-state/by-action-id/'
             }
         )
 

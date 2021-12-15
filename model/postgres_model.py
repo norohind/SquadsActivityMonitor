@@ -178,7 +178,7 @@ class PostgresModel(AbstractModel):
 
         with self.db.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cursor:
             cursor.execute(
-                postgres_sql_requests.select_last_action_id,
+                postgres_sql_requests.select_leaderboard_by_action_id,
                 {
                     'action_id': action_id
                 }
