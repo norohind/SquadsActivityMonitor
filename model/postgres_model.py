@@ -167,6 +167,7 @@ class PostgresModel(AbstractModel):
 
         return result
 
+    @errors_catcher
     def get_leaderboard_by_action_id(self, action_id: int) -> list[dict]:
         cache_key = f'leaderboard_by_action_id_{action_id}'
 
