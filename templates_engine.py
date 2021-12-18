@@ -7,8 +7,8 @@ from os.path import join
 import re
 templates_dir = 'templates'
 
-variable_pattern: re.Pattern = re.compile(r'\{\{ .* }}')
-include_pattern: re.Pattern = re.compile(r'\{\{ @.* }}')
+variable_pattern: re.Pattern = re.compile(r'{{ .*? }}')
+include_pattern: re.Pattern = re.compile(r'{{ @.*? }}')
 
 
 def render(template_name: str, context: dict):
