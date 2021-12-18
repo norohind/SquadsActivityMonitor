@@ -3,7 +3,6 @@ import json
 import falcon
 import os
 from EDMCLogging import get_main_logger
-import utils
 from model.sqlite_cache import cache
 from templates_engine import render
 
@@ -87,10 +86,11 @@ class ActivityDiffHtml:
     def on_get(self, req: falcon.request.Request, resp: falcon.response.Response, action_id: int) -> None:
         resp.content_type = falcon.MEDIA_HTML
         resp.text = render(
-            'table_template.html',
+            'table_diff_template.html',
             {
                 'target_column_name': 'Tag',
-                'target_new_url': '/squads/now/by-tag/short/'
+                'target_new_url': '/squads/now/by-tag/short/',
+                'action_id': action_id
             }
         )
 

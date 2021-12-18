@@ -1,0 +1,18 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+    <head>
+        <meta charset="UTF-8">
+        {{ @json2html_template.html }}
+        <link type="text/css" rel="stylesheet" href="/js/table_styles.css">
+    </head>
+    <body>
+        <div id="table0div">
+        </div>
+        {{ @footer.html }}
+        <div id=footer1div>
+            <footer>
+                <a href="/leaderboard-state/by-action-id/{{ action_id }}">Leaderboard state at that moment</a>
+            </footer>
+        </div>
+    </body>
+</html>
