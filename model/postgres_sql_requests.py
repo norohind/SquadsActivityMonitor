@@ -12,6 +12,7 @@ timestamp timestamp default timezone('utc', now()));
 
 create index if not exists idx_action_id_0 on squads_stats_states (action_id);
 create index if not exists idx_platform_leaderboard_type_1 on squads_stats_states(platform, leaderboard_type);
+create index if not exists idx_timestamp_0 on squads_stats_states(timestamp);
 """
 
 select_last_action_id = """select action_id 
