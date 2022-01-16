@@ -1,5 +1,6 @@
 import json
 import typing
+import datetime
 
 import psycopg2.extensions
 import psycopg2.extras
@@ -62,6 +63,20 @@ class PostgresModel(AbstractModel):
             return json.loads(cached_result)
 
         logger.debug(f'Not cached result for {cache_key}')
+
+        if low_timestamp is None and high_timestamp is None and limit is None:
+            # let's apply an optimization: use yesterday's date as minimal date
+            high_timestamp = '3307-12-12'
+            low_timestamp = (datetime.date.today() - datetime.timedelta(days=1)).strftime('%Y-%m-%d')
+
+        if low_timestamp is None:
+            low_timestamp = '0001-01-01'
+
+        if high_timestamp is None:
+            high_timestamp = '3307-12-12'
+
+        if limit is None:
+            limit = 10
 
         with self.db.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cursor:
             cursor.execute(postgres_sql_requests.select_activity_pretty_names, {

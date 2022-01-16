@@ -38,9 +38,9 @@ class Activity:
         args_activity_changes = {
             'platform': platform,
             'leaderboard_type': leaderboard,
-            'limit': req.params.get('limit', 10),
-            'high_timestamp': req.params.get('before', '3307-12-12'),
-            'low_timestamp': req.params.get('after', '0001-01-01')
+            'limit': req.params.get('limit', None),
+            'high_timestamp': req.params.get('before', None),
+            'low_timestamp': req.params.get('after', None)
         }
 
         try:
