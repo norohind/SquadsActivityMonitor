@@ -193,7 +193,7 @@ class LeaderboardByActionIDHTML:
             'table_template.html',
             {
                 'target_column_name': 'tag',
-                'target_new_url': '/api/leaderboard-state/by-action-id/'
+                'target_new_url': '/squads/now/by-tag/short/'
             }
         )
 
