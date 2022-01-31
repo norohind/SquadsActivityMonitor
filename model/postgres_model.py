@@ -18,12 +18,18 @@ logger.propagate = False
 
 def errors_catcher(func: callable) -> callable:
     def decorated(*args, **kwargs):
+        self: PostgresModel = args[0]
         try:
             result = func(*args, **kwargs)
 
         except psycopg2.InterfaceError:
-            args[0].open_model()
+            self.open_model()  # args[0] - self
             result = func(*args, **kwargs)
+
+        except Exception:
+            # just reset transaction at least
+            self.db.rollback()
+            raise
 
         return result
 
