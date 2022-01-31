@@ -37,7 +37,7 @@ from
             sum_score, 
             min(timestamp) as timestamp, 
             action_id, 
-            lag (sum_score, 1) over (order by sum_score) sum_score_old 
+            lag (sum_score, 1) over (order by action_id) sum_score_old
         from (
                 select sum(score) as sum_score, min(timestamp) as timestamp, action_id 
                 from squads_stats_states 
