@@ -25,6 +25,32 @@ platform - one of
     PC
 """
 
+keys_mapping = {
+    'sum_score': 'TotalExperience',
+    'timestamp': 'Timestamp UTC',
+    'action_id': 'Action ID',
+    'sum_score_old': 'Total Experience Old',
+    'diff': 'Diff',
+    'squadron_name': 'Squadron Name',
+    'tag': 'Tag',
+    'total_experience': 'Total Experience',
+    'total_experience_old': 'Total Experience Old',
+    'total_experience_diff': 'Total Experience Diff',
+    'leaderboard_type': 'Leaderboard Type',
+    'platform': 'Platform'
+}
+
+
+def prettify_keys(rows: list[dict]) -> list[dict]:
+    for row in rows:
+        for key in list(row.keys()):
+            pretty_key = keys_mapping.get(key)
+            if pretty_key is not None:
+                row[pretty_key] = row.pop(key)
+
+    return rows
+
+
 logger = get_main_logger()
 
 model.open_model()
@@ -43,8 +69,14 @@ class Activity:
             'low_timestamp': req.params.get('after', None)
         }
 
+        pretty_keys: bool = req.params.get('pretty_keys', 'false').lower() == 'true'
+
         try:
-            resp.text = json.dumps(model.get_activity_changes(**args_activity_changes))
+            model_response: list[dict] = model.get_activity_changes(**args_activity_changes)
+            if pretty_keys:
+                model_response = prettify_keys(model_response)
+
+            resp.text = json.dumps(model_response)
 
         except Exception as e:
             logger.warning(
@@ -62,7 +94,7 @@ class ActivityHtml:
         resp.text = render(
             'table_template.html',
             {
-                'target_column_name': 'ActionId',
+                'target_column_name': keys_mapping['action_id'],
                 'target_new_url': '/diff/',
              })
 
@@ -79,7 +111,12 @@ class ActivityDiff:
         """
 
         resp.content_type = falcon.MEDIA_JSON
-        resp.text = json.dumps(model.get_diff_action_id(action_id))
+        pretty_keys: bool = req.params.get('pretty_keys', 'false').lower() == 'true'
+        model_response = model.get_diff_action_id(action_id)
+        if pretty_keys:
+            model_response = prettify_keys(model_response)
+
+        resp.text = json.dumps(model_response)
 
 
 class ActivityDiffHtml:
@@ -135,7 +172,7 @@ class LeaderboardByActionIDHTML:
         resp.text = render(
             'table_template.html',
             {
-                'target_column_name': 'Tag',
+                'target_column_name': keys_mapping['tag'],
                 'target_new_url': '/api/leaderboard-state/by-action-id/'
             }
         )

@@ -1,14 +1,26 @@
         <script src="/js/json2htmltable.js"></script>
-         <script type="text/javascript">
+        <script type="text/javascript">
             window.addEventListener("load", () => {
                 let xhr = new XMLHttpRequest();
                 let api_endpoint = location.protocol + '//' + location.host + '/api' + location.pathname + location.search;
+                if (location.search.substring(0, 1) == '?') {  // params already exists
+                    api_endpoint = api_endpoint + '&pretty_keys=true';
+
+                } else {
+                    api_endpoint = api_endpoint + '?pretty_keys=true';
+                }
+
                 table = document.getElementById('table0div');
                 xhr.open('GET', api_endpoint)
 
                 xhr.onload = function() {
                     table = document.getElementById('table0div');
-                    table.innerHTML = '';
+                    if (xhr.status != 200) {
+                        table.innerHTML = 'Error: ' + xhr.status + '; ' + xhr.response;
+                    } else {
+                        table.innerHTML = '';
+                    }
+
                     table.appendChild(buildHtmlTable(JSON.parse(xhr.response))); // build table
 
                     var table = document.querySelector("#table0div > table")
@@ -35,6 +47,6 @@
                 };
 
                 xhr.send()
-                table.innerHTML = 'Loading...';
+                table.innerHTML = 'Loading: waiting for server response';
             })
         </script>

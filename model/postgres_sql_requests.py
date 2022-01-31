@@ -26,11 +26,11 @@ values
 (%(action_id)s, %(LB_type)s, %(platform)s, %(squadron)s, %(score)s, %(percentile)s, %(rank)s, %(name)s, %(tag)s);"""
 
 select_activity_pretty_names = """select 
-sum_score::bigint as "TotalExperience", 
-to_char(timestamp, 'YYYY-MM-DD HH24:MI:SS') as "Timestamp UTC",
-action_id::bigint as "ActionId", 
-sum_score_old::bigint as "TotalExperienceOld", 
-(sum_score - sum_score_old)::bigint as "Diff" 
+sum_score::bigint as "sum_score", 
+to_char(timestamp, 'YYYY-MM-DD HH24:MI:SS') as "timestamp",
+action_id::bigint as "action_id", 
+sum_score_old::bigint as "sum_score_old", 
+(sum_score - sum_score_old)::bigint as "diff" 
 from 
     (
         select 
@@ -56,13 +56,13 @@ where (sum_score - sum_score_old) <> 0
 limit %(limit)s;"""
 
 select_diff_by_action_id = """select 
-    coalesce(new_stats.name, old_stats.name) as "SquadronName",
-    coalesce(new_stats.tag, old_stats.tag) as "Tag", 
-    coalesce(new_stats.score, 0) as "TotalExperience", 
-    coalesce(old_stats.score, 0) as "TotalExperienceOld", 
-    coalesce(new_stats.score, 0) - coalesce(old_stats.score, 0) as "TotalExperienceDiff", 
-    coalesce(new_stats.leaderboard_type, old_stats.leaderboard_type) as "LeaderBoardType", 
-    coalesce(new_stats.platform, old_stats.platform) as "Platform"
+    coalesce(new_stats.name, old_stats.name) as "squadron_name",
+    coalesce(new_stats.tag, old_stats.tag) as "tag", 
+    coalesce(new_stats.score, 0) as "total_experience", 
+    coalesce(old_stats.score, 0) as "total_experience_old", 
+    coalesce(new_stats.score, 0) - coalesce(old_stats.score, 0) as "total_experience_diff", 
+    coalesce(new_stats.leaderboard_type, old_stats.leaderboard_type) as "leaderboard_type", 
+    coalesce(new_stats.platform, old_stats.platform) as "platform"
 from (
     select * 
     from squads_stats_states 
