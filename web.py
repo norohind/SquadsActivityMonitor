@@ -125,7 +125,7 @@ class ActivityDiffHtml:
         resp.text = render(
             'table_diff_template.html',
             {
-                'target_column_name': 'Tag',
+                'target_column_name': keys_mapping['tag'],
                 'target_new_url': '/squads/now/by-tag/short/',
                 'action_id': action_id
             }
@@ -160,6 +160,26 @@ class SumLeaderboardHistoryHtml:
         )
 
 
+class LatestLeaderboard:
+    def on_get(self, req: falcon.request.Request, resp: falcon.response.Response, leaderboard: str, platform: str)\
+            -> None:
+        resp.content_type = falcon.MEDIA_JSON
+        resp.text = json.dumps(model.get_latest_leaderboard(platform, leaderboard))
+
+
+class LatestLeaderboardHtml:
+    def on_get(self, req: falcon.request.Request, resp: falcon.response.Response, leaderboard: str, platform: str)\
+            -> None:
+        resp.content_type = falcon.MEDIA_HTML
+        resp.text = render(
+            'table_template.html',
+            {
+                'target_column_name': 'tag',
+                'target_new_url': '/squads/now/by-tag/short/'
+            }
+        )
+
+
 class LeaderboardByActionID:
     def on_get(self, req: falcon.request.Request, resp: falcon.response.Response, action_id: int) -> None:
         resp.content_type = falcon.MEDIA_JSON
@@ -172,7 +192,7 @@ class LeaderboardByActionIDHTML:
         resp.text = render(
             'table_template.html',
             {
-                'target_column_name': keys_mapping['tag'],
+                'target_column_name': 'tag',
                 'target_new_url': '/api/leaderboard-state/by-action-id/'
             }
         )
@@ -198,11 +218,13 @@ app.add_route('/api/leaderboard/{leaderboard}/platform/{platform}', Activity())
 app.add_route('/api/diff/{action_id}', ActivityDiff())
 app.add_route('/api/leaderboard-history/leaderboard/{leaderboard}/platform/{platform}', SumLeaderboardHistory())
 app.add_route('/api/leaderboard-state/by-action-id/{action_id}', LeaderboardByActionID())
+app.add_route('/api/leaderboard-state/now/{leaderboard}/platform/{platform}', LatestLeaderboard())
 
 app.add_route('/leaderboard/{leaderboard}/platform/{platform}', ActivityHtml())
 app.add_route('/diff/{action_id}', ActivityDiffHtml())
 app.add_route('/leaderboard-history/leaderboard/{leaderboard}/platform/{platform}', SumLeaderboardHistoryHtml())
 app.add_route('/leaderboard-state/by-action-id/{action_id}', LeaderboardByActionIDHTML())
+app.add_route('/leaderboard-state/now/{leaderboard}/platform/{platform}', LatestLeaderboardHtml())
 
 
 app.add_route('/api/cache/{action}', Cache())

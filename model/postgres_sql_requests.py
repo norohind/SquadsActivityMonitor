@@ -98,7 +98,7 @@ limit 1000;
 """
 
 select_leaderboard_by_action_id = """select
-    name,
+    name as squadron_name,
     tag,
     rank,
     score,
@@ -108,5 +108,22 @@ select_leaderboard_by_action_id = """select
     squadron_id
 from squads_stats_states
 where action_id = %(action_id)s
+order by score desc;
+"""
+
+select_latest_leaderboard = """select 
+    name as squadron_name,
+    tag,
+    rank,
+    score,
+    to_char(timestamp, 'YYYY-MM-DD HH24:MI:SS') as timestamp,
+    leaderboard_type,
+    platform,
+    squadron_id
+from squads_stats_states 
+where action_id = (
+                    select max(action_id) as action_id 
+                    from squads_stats_states 
+                    where leaderboard_type = %(LB_type)s and platform = %(platform)s)
 order by score desc;
 """
