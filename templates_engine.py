@@ -15,10 +15,16 @@ def render(template_name: str, context: dict):
     template_path = join(templates_dir, template_name)
     template = get_file_content(template_path)
 
-    for include_statement in re.findall(include_pattern, template):
-        file_include = include_statement.split(' ')[1][1:]
-        include_content = get_file_content(join(templates_dir, file_include))
-        template = template.replace(include_statement, include_content)
+    including = True
+
+    while including:
+        including = False
+
+        for include_statement in re.findall(include_pattern, template):
+            including = True
+            file_include = include_statement.split(' ')[1][1:]
+            include_content = get_file_content(join(templates_dir, file_include))
+            template = template.replace(include_statement, include_content)
 
     for var_to_replace in re.findall(variable_pattern, template):
         key = var_to_replace.split(' ')[1]
