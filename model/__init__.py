@@ -13,3 +13,4 @@ if config.log_level == 'DEBUG':
     model.get_activity_changes = utils.measure(model.get_activity_changes, 'model.get_activity_changes')
     model.get_leaderboard_sum_history = utils.measure(model.get_leaderboard_sum_history,
                                                       'model.get_leaderboard_sum_history')
+    model.get_latest_leaderboard = utils.measure(model.get_latest_leaderboard, 'model.get_latest_leaderboard')

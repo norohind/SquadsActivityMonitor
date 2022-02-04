@@ -25,12 +25,12 @@ class AbstractModel(abc.ABC):
         raise NotImplemented
 
     @abc.abstractmethod
-    def get_leaderboard_sum_history(self, platform: str, leaderboard_type: str) -> list[dict]:
+    def get_leaderboard_sum_history(self, platform: str, leaderboard_type: str) -> list:
         raise NotImplemented
 
     @abc.abstractmethod
-    def get_leaderboard_by_action_id(self, action_id: int) -> list[dict]:
+    def get_leaderboard_by_action_id(self, action_id: int) -> list:
         raise NotImplemented
 
-    def get_latest_leaderboard(self, platform: str, leaderboard_type: str) -> list[dict]:
+    def get_latest_leaderboard(self, platform: str, leaderboard_type: str) -> list:
         raise NotImplemented

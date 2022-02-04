@@ -36,6 +36,10 @@ def errors_catcher(func: callable) -> callable:
     return decorated
 
 
+def get_header_row(description: tuple) -> list[str]:
+    return [column.name for column in description]
+
+
 class PostgresModel(AbstractModel):
     db: psycopg2.extensions.connection
 
@@ -84,16 +88,18 @@ class PostgresModel(AbstractModel):
         if limit is None:
             limit = 10
 
-        with self.db.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cursor:
+        with self.db.cursor() as cursor:
             cursor.execute(postgres_sql_requests.select_activity_pretty_names, {
                 'LB_type': utils.LeaderboardTypes(leaderboard_type.lower()).value,
                 'platform': utils.Platform(platform.upper()).value,
                 'limit': limit,
                 'high_timestamp': high_timestamp,
                 'low_timestamp': low_timestamp
-            })
+            }
+                           )
 
             result: list = cursor.fetchall()
+            result.insert(0, get_header_row(cursor.description))
 
         if not cache.disabled:
             cache.set(cache_key, json.dumps(result))
@@ -156,9 +162,10 @@ class PostgresModel(AbstractModel):
 
         logger.debug(f'Not cached result for {cache_key}')
 
-        with self.db.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cursor:
+        with self.db.cursor(cursor_factory=psycopg2.extras.DictCursor) as cursor:
             cursor.execute(postgres_sql_requests.select_diff_by_action_id, {'action_id': action_id})
             result: list = cursor.fetchall()
+            result.insert(0, get_header_row(cursor.description))
 
         if not cache.disabled:
             cache.set(cache_key, json.dumps(result))
@@ -166,7 +173,7 @@ class PostgresModel(AbstractModel):
         return result
 
     @errors_catcher
-    def get_leaderboard_sum_history(self, platform: str, leaderboard_type: str) -> list[dict]:
+    def get_leaderboard_sum_history(self, platform: str, leaderboard_type: str) -> list:
         cache_key = f'sum_history_{platform}_{leaderboard_type}'
         cached_result: typing.Union[str, None] = cache.get(cache_key)
 
@@ -174,14 +181,17 @@ class PostgresModel(AbstractModel):
             logger.debug(f'Cached result for {cache_key}')
             return json.loads(cached_result)
 
-        with self.db.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cursor:
+        with self.db.cursor() as cursor:
             cursor.execute(
                 postgres_sql_requests.select_leaderboard_sum_history,
                 {
                     'LB_type': utils.LeaderboardTypes(leaderboard_type.lower()).value,
-                    'platform': utils.Platform(platform.upper()).value}
+                    'platform': utils.Platform(platform.upper()).value
+                }
             )
+
             result: list = cursor.fetchall()
+            result.insert(0, get_header_row(cursor.description))
 
         if not cache.disabled:
             cache.set(cache_key, json.dumps(result))
@@ -189,7 +199,7 @@ class PostgresModel(AbstractModel):
         return result
 
     @errors_catcher
-    def get_leaderboard_by_action_id(self, action_id: int) -> list[dict]:
+    def get_leaderboard_by_action_id(self, action_id: int) -> list:
         cache_key = f'leaderboard_by_action_id_{action_id}'
 
         cached_result: typing.Union[str, None] = cache.get(cache_key)
@@ -198,7 +208,7 @@ class PostgresModel(AbstractModel):
             logger.debug(f'Cached result for {cache_key}')
             return json.loads(cached_result)
 
-        with self.db.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cursor:
+        with self.db.cursor() as cursor:
             cursor.execute(
                 postgres_sql_requests.select_leaderboard_by_action_id,
                 {
@@ -206,7 +216,8 @@ class PostgresModel(AbstractModel):
                 }
             )
 
-            result: list[dict] = cursor.fetchall()
+            result: list = cursor.fetchall()
+            result.insert(0, get_header_row(cursor.description))
 
         if not cache.disabled:
             cache.set(cache_key, json.dumps(result))
@@ -214,7 +225,7 @@ class PostgresModel(AbstractModel):
         return result
 
     @errors_catcher
-    def get_latest_leaderboard(self, platform: str, leaderboard_type: str) -> list[dict]:
+    def get_latest_leaderboard(self, platform: str, leaderboard_type: str) -> list:
         cache_key = f'latest_leaderboard_{platform}_{leaderboard_type}'
         cached_result: typing.Union[str, None] = cache.get(cache_key)
 
@@ -224,7 +235,7 @@ class PostgresModel(AbstractModel):
 
         logger.debug(f'Not cached result for {cache_key}')
 
-        with self.db.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cursor:
+        with self.db.cursor() as cursor:
             cursor.execute(
                 postgres_sql_requests.select_latest_leaderboard,
                 {
@@ -232,7 +243,9 @@ class PostgresModel(AbstractModel):
                     'LB_type': leaderboard_type.lower()
                 }
             )
-            result: list[dict] = cursor.fetchall()
+
+            result: list = cursor.fetchall()
+            result.insert(0, get_header_row(cursor.description))
 
         if not cache.disabled:
             cache.set(cache_key, json.dumps(result))
