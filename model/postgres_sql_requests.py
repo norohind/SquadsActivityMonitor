@@ -90,27 +90,41 @@ with origin_record as (
         select prev_action_id
         from prev_records_lag, origin_record
         where prev_records_lag.action_id = origin_record.action_id
-    )
+    ),
+
+    main as (
+    select
+        coalesce(new_stats.name, old_stats.name) as "squadron_name",
+        coalesce(new_stats.tag, old_stats.tag) as "tag",
+        coalesce(new_stats.score, 0) as "total_experience",
+        coalesce(old_stats.score, 0) as "total_experience_old",
+        coalesce(new_stats.score, 0) - coalesce(old_stats.score, 0) as "total_experience_diff",
+        new_stats.action_id as action_id
+    from (
+            select *
+            from squads_stats_states_data
+            where action_id = %(action_id)s
+        ) new_stats
+    full join (
+        select *
+        from squads_stats_states_data, prev_record
+        where action_id = prev_record.prev_action_id
+        ) old_stats
+        on new_stats.squadron_id = old_stats.squadron_id
+    where coalesce(new_stats.score, 0) - coalesce(old_stats.score, 0) <> 0
+    order by coalesce(new_stats.score, 0) - coalesce(old_stats.score, 0) desc)
 
 select
-    coalesce(new_stats.name, old_stats.name) as "squadron_name",
-    coalesce(new_stats.tag, old_stats.tag) as "tag",
-    coalesce(new_stats.score, 0) as "total_experience",
-    coalesce(old_stats.score, 0) as "total_experience_old",
-    coalesce(new_stats.score, 0) - coalesce(old_stats.score, 0) as "total_experience_diff"
-from (
-        select *
-        from squads_stats_states_data
-        where action_id = %(action_id)s
-    ) new_stats
-full join (
-    select *
-    from squads_stats_states_data, prev_record
-    where action_id = prev_record.prev_action_id
-    ) old_stats
-    on new_stats.squadron_id = old_stats.squadron_id
-where coalesce(new_stats.score, 0) - coalesce(old_stats.score, 0) <> 0
-order by coalesce(new_stats.score, 0) - coalesce(old_stats.score, 0) desc;"""
+    "squadron_name",
+    "tag",
+    "total_experience",
+    "total_experience_old",
+    "total_experience_diff",
+    squads_stats_states_action_info.leaderboard_type as "leaderboard_type",
+    squads_stats_states_action_info.platform as "platform"
+from main
+    inner join squads_stats_states_action_info
+        on main.action_id = squads_stats_states_action_info.action_id"""
 
 select_leaderboard_sum_history = """
 select
