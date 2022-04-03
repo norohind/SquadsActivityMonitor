@@ -3,7 +3,6 @@ import os
 import time
 import enum
 
-import falcon
 import requests
 import config
 from EDMCLogging import get_main_logger
@@ -18,7 +17,7 @@ if config.time_between_requests is not None:
     except TypeError:  # env doesn't contain a float
         pass
 
-logger.debug(f'TIME_BETWEEN_REQUESTS = {TIME_BETWEEN_REQUESTS} {type(TIME_BETWEEN_REQUESTS)}')
+# logger.debug(f'TIME_BETWEEN_REQUESTS = {TIME_BETWEEN_REQUESTS} {type(TIME_BETWEEN_REQUESTS)}')
 
 # proxy: last request time
 # ssh -C2 -T -n -N -D 2081 <a server>
