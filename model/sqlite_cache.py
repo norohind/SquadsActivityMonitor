@@ -25,7 +25,7 @@ class Cache:
         self.db.row_factory = lambda c, r: dict(zip([col[0] for col in c.description], r))
 
         with self.db:
-            self.db.execute("create table if not exists cache (key text unique, value text);")
+            self.db.execute("create table if not exists cache (key text primary key, value text);")
 
     def set(self, key, value) -> None:
         if self.disabled:
