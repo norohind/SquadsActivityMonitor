@@ -116,25 +116,16 @@ class PostgresModel(AbstractModel):
         action_id: int  # not last, current that we will use
 
         with self.db.cursor() as cursor:
-            cursor.execute(postgres_sql_requests.select_last_action_id)
-            action_id_fetch_one: typing.Union[None, dict[str, int]] = cursor.fetchone()
+            cursor.execute(postgres_sql_requests.create_new_action_id, {'LB_type': LB_type, 'platform': platform})
+            action_id: int = cursor.fetchone()[0]
 
-        if action_id_fetch_one is None:
-            # i.e. first launch
-            action_id = 1  # yep, not 0
+            # Patch for additional values
+            for squad in leaderboard:
+                squad.update({'action_id': action_id})
 
-        else:
-            action_id = action_id_fetch_one['action_id'] + 1
+            cursor.executemany(postgres_sql_requests.insert_leaderboard, leaderboard)
 
-        # Patch for additional values
-        for squad in leaderboard:
-            squad.update({'action_id': action_id, 'LB_type': LB_type, 'platform': platform})
-
-        with self.db:
-            with self.db.cursor() as cursor:
-                cursor.executemany(
-                    postgres_sql_requests.insert_leader_board,
-                    leaderboard)
+        self.db.commit()
 
         cache.delete_all()  # drop cache
 
