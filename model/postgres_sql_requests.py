@@ -17,6 +17,15 @@ foreign key (action_id) references squads_stats_states_action_info(action_id)
 );
 """
 
+"""
+In order to sync action_id with appropriate serial sequence, execute 
+SELECT 
+    setval(
+            'squads_stats_states_action_info_action_id_seq', 
+            (SELECT MAX(action_id) FROM squads_stats_states_action_info)+1
+            );
+"""
+
 create_new_action_id = """
 insert into squads_stats_states_action_info (leaderboard_type, platform) values (%(LB_type)s, %(platform)s);
 
