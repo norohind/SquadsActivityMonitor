@@ -142,7 +142,7 @@ select
 from squads_stats_states_data
 inner join squads_stats_states_action_info
     on squads_stats_states_action_info.action_id = squads_stats_states_data.action_id
-where leaderboard_type = 'cqc' and platform = 'PC'
+where leaderboard_type = %(LB_type)s and platform = %(platform)s
 group by squads_stats_states_data.action_id
 order by "Timestamp UTC" desc
 limit 1000;
@@ -170,8 +170,8 @@ with max_action_id as (
            max(action_id) as action_id
     from squads_stats_states_action_info
     where
-          leaderboard_type = 'cqc' and
-          platform = 'PC'
+          leaderboard_type = %(LB_type)s and
+          platform = %(platform)s
     ),
 
     leaderboard as (
