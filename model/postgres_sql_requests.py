@@ -108,7 +108,7 @@ with origin_record as (
         coalesce(new_stats.score, 0) as "total_experience",
         coalesce(old_stats.score, 0) as "total_experience_old",
         coalesce(new_stats.score, 0) - coalesce(old_stats.score, 0) as "total_experience_diff",
-        new_stats.action_id as action_id
+        coalesce(new_stats.action_id, old_stats.action_id) as action_id
     from (
             select *
             from squads_stats_states_data
