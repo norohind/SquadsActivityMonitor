@@ -101,7 +101,7 @@ class PostgresModel(AbstractModel):
         return result
 
     @errors_catcher
-    def insert_leaderboard_db(self, leaderboard_list: dict) -> None:
+    def insert_leaderboard_db(self, leaderboard_list: dict) -> int:
         """
         Takes leaderboard as list, it platform, type, db connection and insert leaderboard to DB
 
@@ -128,6 +128,7 @@ class PostgresModel(AbstractModel):
         self.db.commit()
 
         cache.delete_all()  # drop cache
+        return action_id
 
     @errors_catcher
     def get_diff_action_id(self, action_id: int) -> list:

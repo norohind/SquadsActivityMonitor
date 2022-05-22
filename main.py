@@ -1,9 +1,10 @@
 import requests
 from model import model
-# from EDMCLogging import get_main_logger
 import utils
+import HookSystem
 
 model.open_model()
+hook_system = HookSystem.HookSystem()
 
 
 def request_leaderboard(platform_enum: utils.Platform, leaderboard_type_enum: utils.LeaderboardTypes) -> dict:
@@ -31,7 +32,7 @@ def request_leaderboard(platform_enum: utils.Platform, leaderboard_type_enum: ut
 
 def get_and_save_leaderboard(platform_enum: utils.Platform, leaderboard_type_enum: utils.LeaderboardTypes) -> None:
     """
-    High logic function to get and save information about specified for type and platform leaderboard
+    High logic function to get and save information about specified for type and platform leaderboard and call hooks
 
     :param platform_enum:
     :param leaderboard_type_enum:
@@ -39,7 +40,8 @@ def get_and_save_leaderboard(platform_enum: utils.Platform, leaderboard_type_enu
     """
 
     req = request_leaderboard(platform_enum, leaderboard_type_enum)
-    model.insert_leaderboard_db(req)
+    action_id = model.insert_leaderboard_db(req)
+    hook_system.notify_updated(action_id)
 
 
 def main():

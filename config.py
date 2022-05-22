@@ -17,3 +17,5 @@ log_level = os.getenv('LOG_LEVEL', 'DEBUG').upper()
 time_between_requests = os.getenv("TIME_BETWEEN_REQUESTS")
 
 sqlite2postgres_sqlite_location = os.getenv('SQLITE2POSTGRES_SQLITE_LOCATION')
+
+discord_hook_url_1 = os.getenv('DISCORD_HOOK_URL_1', None)

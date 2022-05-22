@@ -17,7 +17,7 @@ class AbstractModel(abc.ABC):
         raise NotImplemented
 
     @abc.abstractmethod
-    def insert_leaderboard_db(self, leaderboard_list: dict) -> None:
+    def insert_leaderboard_db(self, leaderboard_list: dict) -> int:
         raise NotImplemented
 
     @abc.abstractmethod
