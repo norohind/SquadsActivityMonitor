@@ -198,4 +198,5 @@ select
 from leaderboard
 inner join squads_stats_states_action_info
     on squads_stats_states_action_info.action_id = leaderboard.action_id
+order by score desc;
 """
