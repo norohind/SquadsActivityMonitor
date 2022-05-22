@@ -1,25 +1,3 @@
-"""
-Run by third side (i.e. cron)
-Request all or specified combination of platform + activity
-Write results to sqlite DB in journal like format
-
-
-AP - appropriate field from json
-DB structure
-states:
-action_id integer - id of insertion, all records from one request will have the same action_id
-leaderboard_type string - (AP)
-platform string - platform of data
-squadron_id integer - (squadron field)
-score integer - (AP)
-percentile integer - (AP)
-rank integer - (AP)
-name string - (AP)
-tag string - (AP)
-timestamp - inserts by DB, default TIMESTAMP
-
-"""
-
 import requests
 from model import model
 # from EDMCLogging import get_main_logger
