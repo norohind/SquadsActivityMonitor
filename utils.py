@@ -119,18 +119,18 @@ def proxied_request(url: str, method: str = 'get', **kwargs) -> requests.Respons
 
 
 def _get_bearer() -> str:
-    """Gets bearer token from capi.demb.design (companion-api project, I will upload it on GH one day...)
+    """Gets bearer token from capi.demb.uk (companion-api project, I will upload it on GH one day...)
 
     :return: bearer token as str
     """
     bearer_request: requests.Response = requests.get(
-        url='https://capi.demb.design/random_token', headers={'auth': os.environ['DEMB_CAPI_AUTH']})
+        url='https://capi.demb.uk/random_token', headers={'auth': os.environ['DEMB_CAPI_AUTH']})
 
     try:
         bearer: str = bearer_request.json()['access_token']
 
     except Exception as e:
-        logger.exception(f'Unable to parse capi.demb.design answer\nrequested: {bearer_request.url!r}\n'
+        logger.exception(f'Unable to parse capi.demb.uk answer\nrequested: {bearer_request.url!r}\n'
                          f'code: {bearer_request.status_code!r}\nresponse: {bearer_request.content!r}', exc_info=e)
         raise e
 
