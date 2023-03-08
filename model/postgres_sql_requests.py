@@ -191,6 +191,7 @@ select
        tag,
        rank,
        score,
+       round(score / (select sum(score) from leaderboard) * 100, 2)::real as score_percent,
        to_char(squads_stats_states_action_info.timestamp, 'YYYY-MM-DD HH24:MI:SS') as timestamp,
        squads_stats_states_action_info.leaderboard_type as leaderboard_type,
        squads_stats_states_action_info.platform as platform,
