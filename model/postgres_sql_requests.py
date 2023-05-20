@@ -131,7 +131,7 @@ select
     "total_experience_diff",
     squads_stats_states_action_info.leaderboard_type as "leaderboard_type",
     squads_stats_states_action_info.platform as "platform",
-    to_char((select timestamp from squads_stats_states_action_info ai where ai.action_id = %(action_id)s), 'YYYY-MM-DD HH24:MI:SS') as "Timestamp UTC"
+    to_char((select timestamp from squads_stats_states_action_info ai where ai.action_id = %(action_id)s), 'YYYY-MM-DD HH24:MI:SS') as "timestamp"
 from main
     inner join squads_stats_states_action_info
         on main.action_id = squads_stats_states_action_info.action_id"""
