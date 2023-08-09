@@ -1,0 +1,816 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
+        "type": "dashboard"
+      },
+      {
+        "datasource": {
+          "type": "postgres",
+          "uid": "c3f37a96-72c9-447d-9df7-cdee7182bd0a"
+        },
+        "enable": true,
+        "iconColor": "red",
+        "mappings": {
+          "text": {
+            "source": "field",
+            "value": "season_number"
+          },
+          "time": {
+            "source": "field",
+            "value": "start_date"
+          }
+        },
+        "name": "Seasons bounds",
+        "target": {
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "select * from seasons;",
+          "refId": "Anno",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 3,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "c3f37a96-72c9-447d-9df7-cdee7182bd0a"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "center",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false,
+            "width": 190
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "season_number"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 142
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "start_date"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 238
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "season_number"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Season number"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "start_date"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Start date time"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "end_date"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "End date time"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "expire_time"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Season will end in"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Season will start regarding lower time bound"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 337
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Season will end regarding upper time bound"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 271
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "id": 4,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "Season number"
+          }
+        ]
+      },
+      "pluginVersion": "10.0.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "c3f37a96-72c9-447d-9df7-cdee7182bd0a"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "select\r\n  *, end_date - now() as expire_time, (start_date - $__timeFrom()) as \"Season will start regarding lower time bound\", (end_date - $__timeTo()) as \"Season will end regarding upper time bound\"\r\nfrom seasons\r\nWHERE \"start_date\" <= $__timeTo() AND \"end_date\" >= $__timeFrom();",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Seasons in selected timeframe",
+      "type": "table"
+    },
+    {
+      "config": {
+        "animationDuration": 0,
+        "cellPadding": 2,
+        "cellRadius": 0,
+        "cellSize": 10,
+        "colLimit": "",
+        "displayLegend": true,
+        "domain": "auto",
+        "domainGutter": 2,
+        "hoverDecimals": 0,
+        "hoverUnitFormat": "none",
+        "itemName": [
+          "none",
+          "none"
+        ],
+        "label": {
+          "position": "bottom",
+          "rotate": "null",
+          "width": 60
+        },
+        "legendColors": {
+          "base": "transparent",
+          "empty": "#222",
+          "max": "steelblue",
+          "min": "#666"
+        },
+        "legendStr": "",
+        "legendTitleFormat": {
+          "inner": {},
+          "lower": {},
+          "upper": {}
+        },
+        "subDomain": "auto",
+        "subDomainTitleFormat": {
+          "empty": "{date}",
+          "filled": {}
+        },
+        "verticalOrientation": false
+      },
+      "datasource": {
+        "type": "datasource",
+        "uid": "-- Dashboard --"
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 0
+      },
+      "id": 3,
+      "targets": [
+        {
+          "datasource": {
+            "type": "datasource",
+            "uid": "-- Dashboard --"
+          },
+          "panelId": 1,
+          "refId": "A"
+        }
+      ],
+      "title": "CQC PC activity heatmap",
+      "transformations": [
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "names": [
+                "time",
+                "diff"
+              ]
+            }
+          }
+        }
+      ],
+      "type": "neocat-cal-heatmap-panel"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "c3f37a96-72c9-447d-9df7-cdee7182bd0a"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "text",
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "center",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "filterable": false,
+            "inspect": false,
+            "width": 170
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "action_id"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Action ID"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "sum_score"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Total Points"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "interval"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "How long ago it was"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "time"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Time (local?)"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "diff"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Total points difference"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 16,
+        "w": 9,
+        "x": 0,
+        "y": 6
+      },
+      "id": 1,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "enablePagination": false,
+          "fields": [],
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "Time (local?)"
+          }
+        ]
+      },
+      "pluginVersion": "10.0.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "c3f37a96-72c9-447d-9df7-cdee7182bd0a"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "hide": false,
+          "rawQuery": true,
+          "rawSql": "with action_ids as (\r\n    select action_id, timestamp\r\n    from squads_stats_states_action_info\r\n    where\r\n        leaderboard_type = 'cqc' and\r\n        platform = 'PC' and\r\n        $__timeFilter(timestamp)\r\n    order by action_id desc\r\n    ),\r\n\r\n    sum_history as (\r\n        select sum(score) as sum_score, squads_stats_states_data.action_id as action_id, action_ids.timestamp as timestamp\r\n        from squads_stats_states_data, action_ids\r\n        where squads_stats_states_data.action_id = action_ids.action_id\r\n        group by squads_stats_states_data.action_id, action_ids.timestamp\r\n    ),\r\n\r\n    sum_history_old_calculated as (select\r\n        sum_score,\r\n        min(timestamp) as timestamp,\r\n        action_id,\r\n        lag (sum_score, 1) over (order by action_id) sum_score_old\r\n    from sum_history\r\n    group by sum_score, action_id\r\n    order by timestamp desc\r\n    )\r\n\r\nselect\r\n    max(sum_score::bigint) as sum_score,\r\n    max(action_id::bigint) as \"action_id\",\r\n    min(justify_interval(date_trunc('seconds', now() - timestamp))) as \"interval\",\r\n    $__timeGroup(timestamp, $__interval),  -- timestamp as time,\r\n    sum(sum_score - sum_score_old)::bigint as \"diff\"\r\nfrom sum_history_old_calculated\r\nwhere (sum_score - sum_score_old) <> 0\r\ngroup by time\r\norder by time;",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "PC CQC Activity",
+      "transformations": [],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "c3f37a96-72c9-447d-9df7-cdee7182bd0a"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-RdYlGr"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 6,
+        "x": 9,
+        "y": 6
+      },
+      "id": 6,
+      "options": {
+        "displayMode": "basic",
+        "minVizHeight": 10,
+        "minVizWidth": 0,
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [],
+          "fields": "",
+          "values": true
+        },
+        "showUnfilled": true,
+        "valueMode": "color"
+      },
+      "pluginVersion": "10.0.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "c3f37a96-72c9-447d-9df7-cdee7182bd0a"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "hide": false,
+          "rawQuery": true,
+          "rawSql": "select (select tag from squads_stats_states_data where squadron_id = squad_id limit 1) as tag, diff as points_gained\r\nfrom\r\n  (\r\n    select squadron_id as squad_id, sum(diff) as diff  -- squadron_id as squad_id because we need to avoid same column name in tag resolving subquery\r\n    from (\r\n      select \r\n        coalesce(high_lb.squadron_id, low_lb.squadron_id) as squadron_id, \r\n        high_lb.score - coalesce(low_lb.score, 0) as diff\r\n      from (\r\n        select *\r\n        from squads_stats_states_data\r\n        where action_id = (select min(action_id) as low from squads_stats_states_action_info where $__timeFilter(timestamp) and leaderboard_type = 'cqc' and platform = 'PC')\r\n  ) low_lb \r\n    full join (\r\n    select *\r\n    from squads_stats_states_data\r\n    where action_id = (select max(action_id) as low from squads_stats_states_action_info where $__timeFilter(timestamp) and leaderboard_type = 'cqc' and platform = 'PC')\r\n  ) high_lb\r\n  on high_lb.squadron_id = low_lb.squadron_id\r\n  where high_lb.score - coalesce(low_lb.score, 0) <> 0\r\n) without_grouping\r\ngroup by squadron_id\r\norder by diff desc) without_names;\r\n",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Active squadrons",
+      "type": "bargauge"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "c3f37a96-72c9-447d-9df7-cdee7182bd0a"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "stepAfter",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "links": [],
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 15,
+        "x": 9,
+        "y": 14
+      },
+      "id": 9,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "10.0.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "c3f37a96-72c9-447d-9df7-cdee7182bd0a"
+          },
+          "editorMode": "code",
+          "format": "time_series",
+          "rawQuery": true,
+          "rawSql": "select tag as metric, score, timestamp as time\r\nfrom squads_stats_states_data \r\n  right join squads_stats_states_action_info\r\n    on squads_stats_states_action_info.action_id = squads_stats_states_data.action_id\r\nwhere $__timeFilter(timestamp) and platform = 'PC' and leaderboard_type = 'cqc'\r\nand squadron_id in\r\n(select squadron_id as squad_id  -- squadron_id as squad_id because we need to avoid same column name in tag resolving subquery\r\n    from (\r\n      select \r\n        coalesce(high_lb.squadron_id, low_lb.squadron_id) as squadron_id, \r\n        high_lb.score - low_lb.score as diff\r\n      from (\r\n        select *\r\n        from squads_stats_states_data\r\n        where action_id = (select min(action_id) as low from squads_stats_states_action_info where $__timeFilter(timestamp) and leaderboard_type = 'cqc' and platform = 'PC')\r\n  ) low_lb \r\n    full join (\r\n    select *\r\n    from squads_stats_states_data\r\n    where action_id = (select max(action_id) as low from squads_stats_states_action_info where $__timeFilter(timestamp) and leaderboard_type = 'cqc' and platform = 'PC')\r\n  ) high_lb\r\n  on high_lb.squadron_id = low_lb.squadron_id\r\n  where high_lb.score - coalesce(low_lb.score, 0) <> 0 or high_lb.\"rank\" < 3  -- Given rank stored from zero included\r\n) without_grouping\r\ngroup by squadron_id)\r\norder by timestamp;",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Active + top squadrons points",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "c3f37a96-72c9-447d-9df7-cdee7182bd0a"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 24,
+        "x": 0,
+        "y": 22
+      },
+      "id": 7,
+      "maxDataPoints": 50,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.97,
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "orientation": "auto",
+        "showValue": "auto",
+        "stacking": "none",
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        },
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "c3f37a96-72c9-447d-9df7-cdee7182bd0a"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "with action_ids as (\r\n    select action_id, timestamp\r\n    from squads_stats_states_action_info\r\n    where\r\n        leaderboard_type = 'cqc' and\r\n        platform = 'PC' and\r\n        $__timeFilter(timestamp)\r\n    order by action_id desc\r\n    ),\r\n\r\n    sum_history as (\r\n        select sum(score) as sum_score, squads_stats_states_data.action_id as action_id, action_ids.timestamp as timestamp\r\n        from squads_stats_states_data, action_ids\r\n        where squads_stats_states_data.action_id = action_ids.action_id\r\n        group by squads_stats_states_data.action_id, action_ids.timestamp\r\n    ),\r\n\r\n    sum_history_old_calculated as (select\r\n        sum_score,\r\n        min(timestamp) as timestamp,\r\n        action_id,\r\n        lag (sum_score, 1) over (order by action_id) sum_score_old\r\n    from sum_history\r\n    group by sum_score, action_id\r\n    order by timestamp desc\r\n    )\r\n\r\nselect\r\n    $__timeGroup(timestamp, $__interval),  -- timestamp as time,\r\n    sum(sum_score - sum_score_old)::bigint as \"diff\"\r\nfrom sum_history_old_calculated\r\nwhere (sum_score - sum_score_old) <> 0\r\ngroup by time\r\norder by time;",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "PC CQC Activity but it's not table",
+      "transformations": [],
+      "type": "barchart"
+    }
+  ],
+  "refresh": "1m",
+  "schemaVersion": 38,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "PC CQC",
+  "uid": "b5aa6914-9f9d-4508-8ff7-ed06361caf33",
+  "version": 49,
+  "weekStart": ""
+}
