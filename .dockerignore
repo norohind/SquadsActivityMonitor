@@ -6,4 +6,5 @@ venv
 .git
 uwsgi.ini
 start.bash
+Dockerfile
 squads_stat_cache.sqlite3
