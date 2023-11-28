@@ -4,7 +4,7 @@ template = """
 [uwsgi]
 master = 1
 vacuum = true
-socket = 0.0.0.0:8082
+socket = 0.0.0.0:8080
 enable-threads = true
 die-on-term = true
 thunder-lock = true
