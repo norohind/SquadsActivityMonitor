@@ -32,7 +32,7 @@ EMBED_TEMPLATE = {
     ]
 }
 # as an idea: notifications as a service
-TRACKED_TAGS = ['COFF', 'PLCN', 'CQCD', 'RMLK', 'AXIN', '7725', 'MYCF', 'GXIN', 'L4ND', 'NEWP', 'CCLS', 'BAAS', 'MAXA', 'EGPU', 'LLPC', 'DAOS', 'J3DI', 'ENEX', 'G911', 'IHCF', 'EDXN', 'HLLN', 'NTNS', 'VAT9', 'R0SD', 'RXLA', 'CZ88', 'ECH0', 'GTBE']
+TRACKED_TAGS = ['COFF', 'PLCN', 'CQCD', 'RMLK', 'AXIN', '7725', 'MYCF', 'GXIN', 'L4ND', 'NEWP', 'CCLS', 'BAAS', 'MAXA', 'EGPU', 'LLPC', 'DAOS', 'J3DI', 'ENEX', 'G911', 'IHCF', 'EDXN', 'HLLN', 'NTNS', 'VAT9', 'R0SD', 'RXLA', 'CZ88', 'ECH0', 'GTBE', 'ROEL']
 
 
 def notify_discord(message: dict) -> None:
