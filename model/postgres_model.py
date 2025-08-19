@@ -98,7 +98,7 @@ class PostgresModel(AbstractModel):
 
         platform: str = leaderboard_list['platform']
         LB_type: str = leaderboard_list['type']
-        leaderboard: list = leaderboard_list['leaderboard']
+        leaderboard: list = leaderboard_list['leaderboard']['600']['leaderboard']
 
         action_id: int  # not last, current that we will use
 
