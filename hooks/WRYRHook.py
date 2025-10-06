@@ -32,7 +32,7 @@ EMBED_TEMPLATE = {
     ]
 }
 # as an idea: notifications as a service
-TRACKED_TAGS = ['COFF', 'PLCN', 'CQCD', 'RMLK', 'AXIN', '7725', 'MYCF', 'GXIN', 'L4ND', 'NEWP', 'CCLS', 'BAAS', 'MAXA', 'EGPU', 'LLPC', 'DAOS', 'J3DI', 'ENEX', 'G911', 'IHCF', 'EDXN', 'HLLN', 'NTNS', 'VAT9', 'R0SD', 'RXLA', 'CZ88', 'ECH0', 'GTBE', 'ROEL', 'GOB5', 'MAKH', 'UKRS', 'ASOG', 'STFR', 'BS13', 'RDTK', 'HIDB']
+TRACKED_TAGS = ['COFF', 'PLCN', 'CQCD', 'RMLK', 'AXIN', '7725', 'MYCF', 'GXIN', 'L4ND', 'NEWP', 'CCLS', 'BAAS', 'MAXA', 'EGPU', 'LLPC', 'DAOS', 'J3DI', 'ENEX', 'G911', 'IHCF', 'EDXN', 'HLLN', 'NTNS', 'VAT9', 'R0SD', 'RXLA', 'CZ88', 'ECH0', 'GTBE', 'ROEL', 'GOB5', 'MAKH', 'UKRS', 'ASOG', 'STFR', 'BS13', 'RDTK', 'HIDB', 'IBAS']
 
 
 def notify_discord(message: dict) -> None:
@@ -78,5 +78,6 @@ class WRYRHook(Hook):
 
 def setup(hs: HookSystem):
     hs.add_update_hook(WRYRHook())
+
 
 
