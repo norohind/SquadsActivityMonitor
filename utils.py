@@ -91,6 +91,7 @@ def proxied_request(url: str, method: str = 'get', **kwargs) -> requests.Respons
                 url=url,
                 proxies=proxies,
                 headers={'Authorization': f'Bearer {_get_bearer()}'},
+                timeout=30,
                 **kwargs
             )
 
@@ -124,7 +125,8 @@ def _get_bearer() -> str:
     :return: bearer token as str
     """
     bearer_request: requests.Response = requests.get(
-        url='https://capi.demb.uk/random_token', headers={'auth': os.environ['DEMB_CAPI_AUTH']})
+        url='https://capi.demb.uk/random_token', headers={'auth': os.environ['DEMB_CAPI_AUTH']}, timeout=30
+    )
 
     try:
         bearer: str = bearer_request.json()['access_token']
@@ -159,3 +161,4 @@ def measure(function: callable, name_to_display: str):
         return result
 
     return decorated
+
