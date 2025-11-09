@@ -44,7 +44,8 @@ def notify_discord(message: dict) -> None:
     discord_request: requests.Response = requests.post(
         url=hookURL,
         json=message,
-        timeout=60
+        timeout=60,
+        proxies=config.discord_proxy_dict
     )
 
     try:

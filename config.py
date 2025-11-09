@@ -19,3 +19,10 @@ time_between_requests = os.getenv("TIME_BETWEEN_REQUESTS")
 sqlite2postgres_sqlite_location = os.getenv('SQLITE2POSTGRES_SQLITE_LOCATION')
 
 discord_hook_url_1 = os.getenv('DISCORD_HOOK_URL_1', None)
+
+discord_proxy: str | None = os.getenv("DISCORD_HTTP_PROXY", None)  # like 'http://proxy_server:1081'
+if discord_proxy is None:
+    discord_proxy_dict = {}
+
+else:
+    discord_proxy_dict = {"https": discord_proxy}
