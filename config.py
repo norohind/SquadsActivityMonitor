@@ -14,6 +14,8 @@ sqlite_db_path = os.getenv('SQLITE_DB_PATH', 'squads_stat.sqlite3')
 
 log_level = os.getenv('LOG_LEVEL', 'DEBUG').upper()
 
+capi_endpoint = os.getenv("DEMB_CAPI_ENDPOINT", "https://capi.demb.uk/random_token")
+
 time_between_requests = os.getenv("TIME_BETWEEN_REQUESTS")
 
 sqlite2postgres_sqlite_location = os.getenv('SQLITE2POSTGRES_SQLITE_LOCATION')

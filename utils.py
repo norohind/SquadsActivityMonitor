@@ -125,14 +125,14 @@ def _get_bearer() -> str:
     :return: bearer token as str
     """
     bearer_request: requests.Response = requests.get(
-        url='https://capi.demb.uk/random_token', headers={'auth': os.environ['DEMB_CAPI_AUTH']}, timeout=30
+        url=config.capi_endpoint, headers={'auth': os.environ['DEMB_CAPI_AUTH']}, timeout=30
     )
 
     try:
         bearer: str = bearer_request.json()['access_token']
 
     except Exception as e:
-        logger.exception(f'Unable to parse capi.demb.uk answer\nrequested: {bearer_request.url!r}\n'
+        logger.exception(f'Unable to parse {config.capi_endpoint} answer\nrequested: {bearer_request.url!r}\n'
                          f'code: {bearer_request.status_code!r}\nresponse: {bearer_request.content!r}', exc_info=e)
         raise e
 
